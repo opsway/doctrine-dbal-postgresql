@@ -1,0 +1,27 @@
+{
+  "name": "opsway/doctrine-dbal-postgresql",
+  "description": "Extensions for support Postgres in Doctrine DBAL & DQL",
+  "minimum-stability": "stable",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Alexandr Vronskiy",
+      "email": "alvro@opsway.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.4",
+    "doctrine/dbal": "~2.4",
+    "doctrine/orm": "~2.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "OpsWay": "src/"
+    }
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "1.0-dev"
+    }
+  }
+}
