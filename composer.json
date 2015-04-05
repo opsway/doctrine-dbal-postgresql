@@ -16,7 +16,7 @@
   },
   "autoload": {
     "psr-4": {
-      "OpsWay": "src/"
+      "OpsWay\\": "src/"
     }
   },
   "extra": {
