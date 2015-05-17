@@ -17,7 +17,8 @@ To use the new types you should register them using the [DQL User Defined Functi
 
 #### Custom Types
 
-* ArrayInt (integer[])
+* Array Integer (integer[])
+* Array BigInt (bigint[])
 
 
 

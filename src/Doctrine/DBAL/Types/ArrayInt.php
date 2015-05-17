@@ -10,12 +10,12 @@ class ArrayInt extends Type
 
     public function getName ()
     {
-        return self::ARRAY_INT;
+        return static::ARRAY_INT;
     }
 
     public function getSQLDeclaration (array $fieldDeclaration, AbstractPlatform $platform)
     {
-        return $platform->getDoctrineTypeMapping(self::ARRAY_INT);
+        return $platform->getDoctrineTypeMapping(static::ARRAY_INT);
     }
 
     public function convertToDatabaseValue ($array, AbstractPlatform $platform)
