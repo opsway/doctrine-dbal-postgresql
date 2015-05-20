@@ -1,5 +1,6 @@
 doctrine-dbal-postgresql
 =========================
+[![Latest Stable Version](https://poser.pugx.org/opsway/doctrine-dbal-postgresql/v/stable)](https://packagist.org/packages/opsway/doctrine-dbal-postgresql) [![Total Downloads](https://poser.pugx.org/opsway/doctrine-dbal-postgresql/downloads)](https://packagist.org/packages/opsway/doctrine-dbal-postgresql) [![Latest Unstable Version](https://poser.pugx.org/opsway/doctrine-dbal-postgresql/v/unstable)](https://packagist.org/packages/opsway/doctrine-dbal-postgresql) 
 
 This component allows you to manage some native [PostgreSQL](http://www.postgresql.org)
 data types, operators and functions with the Doctrine [DBAL](http://www.doctrine-project.org/projects/dbal.html) component.
