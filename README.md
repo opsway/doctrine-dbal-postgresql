@@ -34,6 +34,7 @@ To use the new types you should register them using the [DQL User Defined Functi
 * ARR_APPEND -      'OpsWay\Doctrine\ORM\Query\AST\Functions\ArrayAppend'
 * ARR_REPLACE -     'OpsWay\Doctrine\ORM\Query\AST\Functions\ArrayReplace'
 * ARR_REMOVE -      'OpsWay\Doctrine\ORM\Query\AST\Functions\ArrayRemove'
+* ARR_CONTAINS -    'OpsWay\Doctrine\ORM\Query\AST\Functions\ArrayContains'
 
 | Custom Name     | PostgreSql    | Usage in DQL                         | Result in SQL                |
 |-----------------|:-------------:|--------------------------------------|------------------------------|
@@ -47,3 +48,4 @@ To use the new types you should register them using the [DQL User Defined Functi
 | ARR_APPEND      | array_append  | ARR_APPEND(field, :param)            | array_append(field, param)   |
 | ARR_REPLACE     | array_replace | ARR_REPLACE(field, :param1, :param2) | array_replace(field, p1, p2) |
 | ARR_REMOVE      | array_remove  | ARR_REMOVE(field, :param)            | array_remove(field, param)   |
+| ARR_CONTAINS    |      &&       | ARR_CONTAINS(field, :param)          | (field && param)             |
