@@ -36,6 +36,10 @@ To use the new types you should register them using the [DQL User Defined Functi
 * ARR_REPLACE -     'OpsWay\Doctrine\ORM\Query\AST\Functions\ArrayReplace'
 * ARR_REMOVE -      'OpsWay\Doctrine\ORM\Query\AST\Functions\ArrayRemove'
 * ARR_CONTAINS -    'OpsWay\Doctrine\ORM\Query\AST\Functions\ArrayContains'
+* TO_TSQUERY -      'OpsWay\Doctrine\ORM\Query\AST\Functions\ToTsquery'
+* TO_TSVECTOR -     'OpsWay\Doctrine\ORM\Query\AST\Functions\ToTsvector'
+* TS_CONCAT_OP -    'OpsWay\Doctrine\ORM\Query\AST\Functions\TsConcat'
+* TS_MATCH_OP -     'OpsWay\Doctrine\ORM\Query\AST\Functions\TsMatch'
 
 | Custom Name     | PostgreSql    | Usage in DQL                         | Result in SQL                |
 |-----------------|:-------------:|--------------------------------------|------------------------------|
@@ -50,3 +54,7 @@ To use the new types you should register them using the [DQL User Defined Functi
 | ARR_REPLACE     | array_replace | ARR_REPLACE(field, :param1, :param2) | array_replace(field, p1, p2) |
 | ARR_REMOVE      | array_remove  | ARR_REMOVE(field, :param)            | array_remove(field, param)   |
 | ARR_CONTAINS    |      &&       | ARR_CONTAINS(field, :param)          | (field && param)             |
+| TO_TSQUERY      |   to_tsquery  | TO_TSQUERY(:param)                   | to_tsquery('param')          |
+| TO_TSVECTOR     |  to_tsvector  | TO_TSVECTOR(field)                   | to_tsvector(field)           |
+| TS_MATCH_OP     |      @@       | TS_MATCH_OP(expr1, expr2)            | expr1 @@ expr2               |
+| TS_CONCAT_OP    |      ||       | TS_CONCAT_OP(expr1, expr2, ....)     | (expr1 || expr2 || ...)      |
