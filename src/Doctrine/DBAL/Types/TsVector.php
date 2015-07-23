@@ -17,7 +17,7 @@ use Doctrine\DBAL\Types\Type;
  *
  * @author Richard Fullmer <richard.fullmer@opensoftdev.com>
  */
-class TsvectorType extends Type
+class TsVector extends Type
 {
     /**
      * {@inheritdoc}
