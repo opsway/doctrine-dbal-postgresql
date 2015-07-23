@@ -20,6 +20,7 @@ To use the new types you should register them using the [DQL User Defined Functi
 
 * Array Integer (integer[])
 * Array BigInt (bigint[])
+* TsVector (tsvector)
 
 
 
