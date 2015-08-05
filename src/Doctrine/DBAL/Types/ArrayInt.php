@@ -7,16 +7,19 @@ use Doctrine\DBAL\Types\Type;
 
 class ArrayInt extends Type
 {
-    const ARRAY_INT = 'integer[]';
-
     public function getName()
     {
-        return static::ARRAY_INT;
+        return 'array_int';
     }
 
     public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
     {
-        return $platform->getDoctrineTypeMapping(static::ARRAY_INT);
+        return '_int4';
+    }
+
+    public function getMappedDatabaseTypes(AbstractPlatform $platform)
+    {
+        return array('_int4');
     }
 
     public function convertToDatabaseValue($array, AbstractPlatform $platform)
