@@ -2,8 +2,8 @@
 
 namespace Opsway\Doctrine\ORM\Query\AST\Functions;
 
-use Doctrine\ORM\Query\AST\Functions\FunctionNode,
-    Doctrine\ORM\Query\Lexer;
+use Doctrine\ORM\Query\AST\Functions\FunctionNode;
+use Doctrine\ORM\Query\Lexer;
 use Doctrine\ORM\Query\Parser;
 use Doctrine\ORM\Query\SqlWalker;
 
@@ -22,7 +22,7 @@ class Any extends FunctionNode
     public function getSql(SqlWalker $sqlWalker)
     {
         return sprintf(
-            "ANY(%s)",
+            'ANY(%s)',
             $this->expr1->dispatch($sqlWalker)
         );
     }

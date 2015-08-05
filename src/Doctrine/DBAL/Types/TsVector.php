@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of Opensoft Doctrine Postgres Types.
  *
@@ -11,7 +12,7 @@ use Doctrine\DBAL\Types\Type;
 
 /**
  * PHP type is array
- * PostgresType is tsvector
+ * PostgresType is tsvector.
  *
  * https://gist.github.com/3129096
  *
@@ -40,15 +41,16 @@ class TsVector extends Type
      */
     public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
     {
-        return "TSVECTOR";
+        return 'TSVECTOR';
     }
 
     /**
      * Converts a value from its database representation to its PHP representation
      * of this type.
      *
-     * @param mixed $value The value to convert.
+     * @param mixed            $value    The value to convert.
      * @param AbstractPlatform $platform The currently used database platform.
+     *
      * @return mixed The PHP representation of the value.
      */
     public function convertToPHPValue($value, AbstractPlatform $platform)
@@ -68,8 +70,9 @@ class TsVector extends Type
     /**
      * Modifies the SQL expression (identifier, parameter) to convert to a PHP value.
      *
-     * @param string $value
+     * @param string           $value
      * @param AbstractPlatform $platform
+     *
      * @return string
      */
     public function convertToPHPValueSQL($value, $platform)
@@ -80,8 +83,9 @@ class TsVector extends Type
     /**
      * Modifies the SQL expression (identifier, parameter) to convert to a database value.
      *
-     * @param string $sqlExpr
+     * @param string           $sqlExpr
      * @param AbstractPlatform $platform
+     *
      * @return string
      */
     public function convertToDatabaseValueSQL($sqlExpr, AbstractPlatform $platform)
@@ -93,8 +97,9 @@ class TsVector extends Type
      * Converts a value from its PHP representation to its database representation
      * of this type.
      *
-     * @param mixed $value The value to convert.
+     * @param mixed            $value    The value to convert.
      * @param AbstractPlatform $platform The currently used database platform.
+     *
      * @return mixed The database representation of the value.
      */
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
