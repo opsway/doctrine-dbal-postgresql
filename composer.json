@@ -14,14 +14,23 @@
     "doctrine/dbal": "~2.4",
     "doctrine/orm": "~2.4"
   },
+  "require-dev": {
+    "phpunit/phpunit": "~4.7",
+    "squizlabs/php_codesniffer": "~2.0"
+  },
   "autoload": {
     "psr-4": {
       "OpsWay\\": "src/"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "OpsWayTest\\": "tests/"
+    }
+  },
   "extra": {
     "branch-alias": {
-      "dev-master": "1.0-dev"
+      "dev-develop": "1.0-dev"
     }
   }
 }
