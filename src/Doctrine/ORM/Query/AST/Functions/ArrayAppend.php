@@ -1,6 +1,6 @@
 <?php
 
-namespace Opsway\Doctrine\ORM\Query\AST\Functions;
+namespace OpsWay\Doctrine\ORM\Query\AST\Functions;
 
 use Doctrine\ORM\Query\AST\Functions\FunctionNode;
 use Doctrine\ORM\Query\Lexer;

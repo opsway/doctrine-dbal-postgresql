@@ -5,7 +5,7 @@
  *
  * Copyright (c) 2013 Opensoft (http://opensoftdev.com)
  */
-namespace Opsway\Doctrine\DBAL\Types;
+namespace OpsWay\Doctrine\DBAL\Types;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;

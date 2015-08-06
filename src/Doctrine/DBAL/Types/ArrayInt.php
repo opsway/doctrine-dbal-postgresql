@@ -1,6 +1,6 @@
 <?php
 
-namespace Opsway\Doctrine\DBAL\Types;
+namespace OpsWay\Doctrine\DBAL\Types;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
