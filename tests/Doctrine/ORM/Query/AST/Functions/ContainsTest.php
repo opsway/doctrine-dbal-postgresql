@@ -15,7 +15,7 @@ class ContainsTest extends BaseTestCase
             ->setParameter('param1', '{\"test\": 1}')
             ->getSql();
         $this->assertEquals(
-            "SELECT t0_.id AS id0 FROM Stub t0_ WHERE (t0_.attrs @> ?) = true",
+            "SELECT s0_.id AS id_0 FROM Stub s0_ WHERE (s0_.attrs @> ?) = true",
             $resultSql
         );
     }
