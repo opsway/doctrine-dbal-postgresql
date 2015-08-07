@@ -10,8 +10,10 @@ php:
 env:
   - DB=pgsql POSTGRESQL_VERSION=9.4
 
+addons:
+  postgresql: "9.4"
+
 before_script:
-  - sh -c "if [ '$DB' = 'pgsql' ]; then sudo /etc/init.d/postgresql stop; sudo /etc/init.d/postgresql start $POSTGRESQL_VERSION; fi"
   - psql -c 'create database testing;' -U postgres
   - composer self-update
   - composer install --prefer-source
