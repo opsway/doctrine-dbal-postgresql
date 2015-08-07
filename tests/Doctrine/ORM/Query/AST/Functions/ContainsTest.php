@@ -11,10 +11,11 @@ class ContainsTest extends BaseTestCase
     {
         $resultSql = $this
             ->entityManager
-            ->createQuery("SELECT t.id FROM E:Stub t WHERE CONTAINS(t.attrs, '{\"test\": 1}') = TRUE")
+            ->createQuery("SELECT t.id FROM E:Stub t WHERE CONTAINS(t.attrs, :param1) = TRUE")
+            ->setParameter('param1', '{\"test\": 1}')
             ->getSql();
         $this->assertEquals(
-            "SELECT t0_.id AS id0 FROM Stub t0_ WHERE (t0_.attrs @> '{\"test\": 1}') = true",
+            "SELECT t0_.id AS id0 FROM Stub t0_ WHERE (t0_.attrs @> ?) = true",
             $resultSql
         );
     }
