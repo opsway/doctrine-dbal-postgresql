@@ -24,7 +24,7 @@ abstract class BaseTestCase extends \PHPUnit_Framework_TestCase
         $config->setProxyDir(__DIR__ . '/Proxies');
         $config->setProxyNamespace('OpsWayTest\Proxies');
         $config->setAutoGenerateProxyClasses(true);
-        $config->setMetadataDriverImpl($config->newDefaultAnnotationDriver(__DIR__ . '/Entities'));
+        $config->setMetadataDriverImpl($config->newDefaultAnnotationDriver(__DIR__ . '/Entities', false));
         $config->addEntityNamespace('E', 'OpsWayTest\Entities');
         $config->setCustomStringFunctions(array(
             'CONTAINS' => 'OpsWay\Doctrine\ORM\Query\AST\Functions\Contains',
