@@ -42,6 +42,7 @@ To use the new types you should register them using the [DQL User Defined Functi
 * TS_CONCAT_OP -    'OpsWay\Doctrine\ORM\Query\AST\Functions\TsConcat'
 * TS_MATCH_OP -     'OpsWay\Doctrine\ORM\Query\AST\Functions\TsMatch'
 * UNNEST -          'OpsWay\Doctrine\ORM\Query\AST\Functions\Unnest'
+* JSON_AGG -        'OpsWay\Doctrine\ORM\Query\AST\Functions\JsonAgg'
 
 | Custom Name     | PostgreSql    | Usage in DQL                         | Result in SQL                |
 |-----------------|:-------------:|--------------------------------------|------------------------------|
@@ -61,3 +62,4 @@ To use the new types you should register them using the [DQL User Defined Functi
 | TS_MATCH_OP     |      @@       | TS_MATCH_OP(expr1, expr2)            | expr1 @@ expr2               |
 | TS_CONCAT_OP    |      ||       | TS_CONCAT_OP(expr1, expr2, ....)     | (expr1 || expr2 || ...)      |
 | UNNEST          |    UNNEST     | UNNEST(field)                        | UNNEST(field)                |
+| JSON_AGG        |   json_agg    | JSON_AGG(expression)                 | json_agg(expression)         |
