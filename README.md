@@ -31,6 +31,7 @@ To use the new types you should register them using the [DQL User Defined Functi
 * GET_JSON_FIELD -        'OpsWay\Doctrine\ORM\Query\AST\Functions\GetJsonField'
 * GET_JSON_FIELD_BY_KEY - 'OpsWay\Doctrine\ORM\Query\AST\Functions\GetJsonFieldByKey'
 * GET_JSON_OBJECT -       'OpsWay\Doctrine\ORM\Query\AST\Functions\GetJsonObject'
+* GET_JSON_OBJECT_TEXT -  'OpsWay\Doctrine\ORM\Query\AST\Functions\GetJsonObjectText'
 * ANY_OP -                'OpsWay\Doctrine\ORM\Query\AST\Functions\Any'
 * ALL_OP -                'OpsWay\Doctrine\ORM\Query\AST\Functions\All'
 * ARR -                   'OpsWay\Doctrine\ORM\Query\AST\Functions\Arr'
@@ -54,6 +55,7 @@ To use the new types you should register them using the [DQL User Defined Functi
 | GET_JSON_FIELD        |            ->>            | GET_JSON_FIELD(field, 'json_field')        | (table_field->>'json_field')     |
 | GET_JSON_FIELD_BY_KEY |            ->             | GET_JSON_FIELD_BY_KEY(field, 'json_field') | (table_field->'json_field')      |
 | GET_JSON_OBJECT       |            #>             | GET_JSON_OBJECT(field, 'json_field')       | (table_field#>'json_field')      |
+| GET_JSON_OBJECT_TEXT  |            #>>            | GET_JSON_OBJECT_TEXT(field, 'json_field')  | (table_field#>>'json_field')     |
 | ANY_OP                |            ANY            | ANY_OP(field)                              | ANY(field)                       |
 | ALL_OP                |            ALL            | ALL_OP(field)                              | ALL(field)                       |
 | ARR                   |           ARRAY           | ARR(field)                                 | ARRAY[field]                     |
