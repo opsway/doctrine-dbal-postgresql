@@ -14,7 +14,7 @@ php composer.phar require opsway/doctrine-dbal-postgresql:~0.1
 ```
 To use the new types you should register them using the [Custom Mapping Types](https://doctrine-dbal.readthedocs.org/en/latest/reference/types.html#custom-mapping-types) feature.
 
-To use the new types you should register them using the [DQL User Defined Functions](http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/cookbook/dql-user-defined-functions.html) feature.
+To use the new functions you should register them using the [DQL User Defined Functions](http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/cookbook/dql-user-defined-functions.html) feature.
 
 #### Custom Types
 
@@ -37,6 +37,7 @@ To use the new types you should register them using the [DQL User Defined Functi
 * ARR -                   'OpsWay\Doctrine\ORM\Query\AST\Functions\Arr'
 * ARR_APPEND -            'OpsWay\Doctrine\ORM\Query\AST\Functions\ArrayAppend'
 * ARR_REPLACE -           'OpsWay\Doctrine\ORM\Query\AST\Functions\ArrayReplace'
+* REGEXP_REPLACE -        'OpsWay\Doctrine\ORM\Query\AST\Functions\RegexpReplace'
 * ARR_REMOVE -            'OpsWay\Doctrine\ORM\Query\AST\Functions\ArrayRemove'
 * ARR_CONTAINS -          'OpsWay\Doctrine\ORM\Query\AST\Functions\ArrayContains'
 * TO_TSQUERY -            'OpsWay\Doctrine\ORM\Query\AST\Functions\ToTsquery'
@@ -61,6 +62,7 @@ To use the new types you should register them using the [DQL User Defined Functi
 | ARR                   |           ARRAY           | ARR(field)                                 | ARRAY[field]                     |
 | ARR_APPEND            |       array_append        | ARR_APPEND(field, :param)                  | array_append(field, param)       |
 | ARR_REPLACE           |       array_replace       | ARR_REPLACE(field, :param1, :param2)       | array_replace(field, p1, p2)     |
+| REGEXP_REPLACE        |       regexp_replace      | REGEXP_REPLACE(field, :param1, :param2)    | regexp_replace(field, p1, p2)    |
 | ARR_REMOVE            |       array_remove        | ARR_REMOVE(field, :param)                  | array_remove(field, param)       |
 | ARR_CONTAINS          |            &&             | ARR_CONTAINS(field, :param)                | (field && param)                 |
 | TO_TSQUERY            |        to_tsquery         | TO_TSQUERY(:param)                         | to_tsquery('param')              |
