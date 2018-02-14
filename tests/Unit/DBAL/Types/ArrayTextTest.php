@@ -78,7 +78,5 @@ class ArrayTextTest extends TestCase
             ['test', null, '', 'test'],
             $arrayText->convertToPHPValue($validValue, $platform->reveal())
         );
-
-        $arrayText->convertToPHPValue('{"test","NULL","\"\"","test"}', $platform->reveal());
     }
 }
