@@ -46,4 +46,11 @@ class TsQueryTest extends TestCase
             $tsquery->convertToDatabaseValueSQL('test', $platform->reveal())
         );
     }
+
+    public function testCanRequireSQLConversion()
+    {
+        $tsquery = TsQuery::getType('tsquery');
+
+        $this->assertTrue($tsquery->canRequireSQLConversion());
+    }
 }
