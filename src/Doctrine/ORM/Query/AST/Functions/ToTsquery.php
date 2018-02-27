@@ -22,7 +22,7 @@ class ToTsquery extends FunctionNode
         if ($parser->getLexer()->isNextToken(Lexer::T_COMMA)) {
             $parser->match(Lexer::T_COMMA);
             $this->config = $this->expr1;
-            $this->expr1 = $parser->StringExpression();
+            $this->expr1 = $parser->StringPrimary();
         }
 
         $parser->match(Lexer::T_CLOSE_PARENTHESIS);
