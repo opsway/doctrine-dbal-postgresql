@@ -48,6 +48,28 @@ To use the new functions you should register them using the [DQL User Defined Fu
 * JSON_AGG -              'OpsWay\Doctrine\ORM\Query\AST\Functions\JsonAgg'
 * JSONB_ARRAY_ELEM_TEXT - 'OpsWay\Doctrine\ORM\Query\AST\Functions\JsonbArrayElementsText'
 
+### Custom DQL function usage
+For an example the CONTAINS function requires your table column in your datbase to be of the type ```jsonb```.
+Otherwise PostgreSQL will not recognize the operator needed to perform this action. (@>) 
+* Tip: Based on the function you want to use, check if there are any specific column type requirements. 
+
+Example query:
+```
+$result = $this->em->createQuery(
+    'SELECT l FROM Foo\Bar\Baz l WHERE CONTAINS(l.metaData, :value) = true')
+    ->setParameter('value', json_encode(['foo'=>'bar']))
+    ->getResult();
+
+```
+Setting the column type to ```jsonb```. 
+```
+/**
+ * @var array
+ *
+ * @ORM\Column(type="json_array", options={"jsonb=true"})
+ */
+private $metaData;
+```
 
 | Custom Name           | PostgreSql                | Usage in DQL                               | Result in SQL                    |
 |-----------------------|:-------------------------:|--------------------------------------------|----------------------------------|
