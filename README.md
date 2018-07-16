@@ -66,7 +66,7 @@ Setting the column type to ```jsonb```.
 /**
  * @var array
  *
- * @ORM\Column(type="json_array", options={"jsonb=true"})
+ * @ORM\Column(type="json", nullable=true, options={"jsonb": true})
  */
 private $metaData;
 ```
