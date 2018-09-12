@@ -35,6 +35,7 @@ To use the new functions you should register them using the [DQL User Defined Fu
 * ANY_OP -                'OpsWay\Doctrine\ORM\Query\AST\Functions\Any'
 * ALL_OP -                'OpsWay\Doctrine\ORM\Query\AST\Functions\All'
 * ARR -                   'OpsWay\Doctrine\ORM\Query\AST\Functions\Arr'
+* ARR_AGGREGATE -         'OpsWay\Doctrine\ORM\Query\AST\Functions\ArrayAggregate'
 * ARR_APPEND -            'OpsWay\Doctrine\ORM\Query\AST\Functions\ArrayAppend'
 * ARR_REPLACE -           'OpsWay\Doctrine\ORM\Query\AST\Functions\ArrayReplace'
 * REGEXP_REPLACE -        'OpsWay\Doctrine\ORM\Query\AST\Functions\RegexpReplace'
@@ -82,6 +83,7 @@ private $metaData;
 | ANY_OP                |            ANY            | ANY_OP(field)                              | ANY(field)                       |
 | ALL_OP                |            ALL            | ALL_OP(field)                              | ALL(field)                       |
 | ARR                   |           ARRAY           | ARR(field)                                 | ARRAY[field]                     |
+| ARR_AGGREGATE         |        array_agg          | ARR_AGGREGATE(field)                       | array_agg(field)                 |
 | ARR_APPEND            |       array_append        | ARR_APPEND(field, :param)                  | array_append(field, param)       |
 | ARR_REPLACE           |       array_replace       | ARR_REPLACE(field, :param1, :param2)       | array_replace(field, p1, p2)     |
 | REGEXP_REPLACE        |       regexp_replace      | REGEXP_REPLACE(field, :param1, :param2)    | regexp_replace(field, p1, p2)    |
