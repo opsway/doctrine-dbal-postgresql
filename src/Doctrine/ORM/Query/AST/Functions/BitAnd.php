@@ -16,9 +16,9 @@ class BitAnd extends FunctionNode
     {
         $parser->match(Lexer::T_IDENTIFIER);
         $parser->match(Lexer::T_OPEN_PARENTHESIS);
-        $this->expr1 = $parser->StringPrimary();
+        $this->expr1 = $parser->ArithmeticPrimary();
         $parser->match(Lexer::T_COMMA);
-        $this->expr2 = $parser->StringPrimary();
+        $this->expr2 = $parser->ArithmeticPrimary();
         $parser->match(Lexer::T_CLOSE_PARENTHESIS);
     }
 
