@@ -48,7 +48,6 @@ To use the new functions you should register them using the [DQL User Defined Fu
 * UNNEST -                'OpsWay\Doctrine\ORM\Query\AST\Functions\Unnest'
 * JSON_AGG -              'OpsWay\Doctrine\ORM\Query\AST\Functions\JsonAgg'
 * JSONB_ARRAY_ELEM_TEXT - 'OpsWay\Doctrine\ORM\Query\AST\Functions\JsonbArrayElementsText'
-* BIT_AND - 			  'OpsWay\Doctrine\ORM\Query\AST\Functions\BitAnd'
 
 ### Custom DQL function usage
 For an example the CONTAINS function requires your table column in your datbase to be of the type ```jsonb```.
@@ -97,4 +96,3 @@ private $metaData;
 | UNNEST                |          UNNEST           | UNNEST(field)                              | UNNEST(field)                    |
 | JSON_AGG              |         json_agg          | JSON_AGG(expression)                       | json_agg(expression)             |
 | JSONB_ARRAY_ELEM_TEXT | jsonb_array_elements_text | JSONB_ARRAY_ELEM_TEXT(field, 'json_field') | jsonb_array_elements_text(field) |
-| BIT_AND 				| 			 & 				| BIT_AND(field, :param)					 | AND(field) 						|
