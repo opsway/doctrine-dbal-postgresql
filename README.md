@@ -96,3 +96,4 @@ private $metaData;
 | UNNEST                |          UNNEST           | UNNEST(field)                              | UNNEST(field)                    |
 | JSON_AGG              |         json_agg          | JSON_AGG(expression)                       | json_agg(expression)             |
 | JSONB_ARRAY_ELEM_TEXT | jsonb_array_elements_text | JSONB_ARRAY_ELEM_TEXT(field, 'json_field') | jsonb_array_elements_text(field) |
+| BIT_AND 				| 			 & 				| BIT_AND(field, :param)					 | AND(field) 						|
