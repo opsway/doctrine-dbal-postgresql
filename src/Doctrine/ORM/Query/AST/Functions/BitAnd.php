@@ -7,7 +7,7 @@ use Doctrine\ORM\Query\Lexer;
 use Doctrine\ORM\Query\Parser;
 use Doctrine\ORM\Query\SqlWalker;
 
-class ArrayAnd extends FunctionNode
+class BitAnd extends FunctionNode
 {
     private $expr1;
     private $expr2;
