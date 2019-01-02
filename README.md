@@ -29,22 +29,22 @@ To use the new types you should register them using the [DQL User Defined Functi
 
 #### Custom DQL functions
 
-* CONTAINS -        'OpsWay\Doctrine\ORM\Query\AST\Functions\Contains'
-* CONTAINED -       'OpsWay\Doctrine\ORM\Query\AST\Functions\Contained'
-* GET_JSON_FIELD -  'OpsWay\Doctrine\ORM\Query\AST\Functions\GetJsonField'
-* GET_JSON_OBJECT - 'OpsWay\Doctrine\ORM\Query\AST\Functions\GetJsonObject'
-* ANY_OP -          'OpsWay\Doctrine\ORM\Query\AST\Functions\Any'
-* ALL_OP -          'OpsWay\Doctrine\ORM\Query\AST\Functions\All'
-* ARR -             'OpsWay\Doctrine\ORM\Query\AST\Functions\Arr'
-* ARR_APPEND -      'OpsWay\Doctrine\ORM\Query\AST\Functions\ArrayAppend'
-* ARR_REPLACE -     'OpsWay\Doctrine\ORM\Query\AST\Functions\ArrayReplace'
-* ARR_REMOVE -      'OpsWay\Doctrine\ORM\Query\AST\Functions\ArrayRemove'
-* ARR_CONTAINS -    'OpsWay\Doctrine\ORM\Query\AST\Functions\ArrayContains'
-* TO_TSQUERY -      'OpsWay\Doctrine\ORM\Query\AST\Functions\ToTsquery'
-* TO_TSVECTOR -     'OpsWay\Doctrine\ORM\Query\AST\Functions\ToTsvector'
-* TS_CONCAT_OP -    'OpsWay\Doctrine\ORM\Query\AST\Functions\TsConcat'
-* TS_MATCH_OP -     'OpsWay\Doctrine\ORM\Query\AST\Functions\TsMatch'
-* UNNEST -          'OpsWay\Doctrine\ORM\Query\AST\Functions\Unnest'
+* CONTAINS -        'Opsway\Doctrine\ORM\Query\AST\Functions\Contains'
+* CONTAINED -       'Opsway\Doctrine\ORM\Query\AST\Functions\Contained'
+* GET_JSON_FIELD -  'Opsway\Doctrine\ORM\Query\AST\Functions\GetJsonField'
+* GET_JSON_OBJECT - 'Opsway\Doctrine\ORM\Query\AST\Functions\GetJsonObject'
+* ANY_OP -          'Opsway\Doctrine\ORM\Query\AST\Functions\Any'
+* ALL_OP -          'Opsway\Doctrine\ORM\Query\AST\Functions\All'
+* ARR -             'Opsway\Doctrine\ORM\Query\AST\Functions\Arr'
+* ARR_APPEND -      'Opsway\Doctrine\ORM\Query\AST\Functions\ArrayAppend'
+* ARR_REPLACE -     'Opsway\Doctrine\ORM\Query\AST\Functions\ArrayReplace'
+* ARR_REMOVE -      'Opsway\Doctrine\ORM\Query\AST\Functions\ArrayRemove'
+* ARR_CONTAINS -    'Opsway\Doctrine\ORM\Query\AST\Functions\ArrayContains'
+* TO_TSQUERY -      'Opsway\Doctrine\ORM\Query\AST\Functions\ToTsquery'
+* TO_TSVECTOR -     'Opsway\Doctrine\ORM\Query\AST\Functions\ToTsvector'
+* TS_CONCAT_OP -    'Opsway\Doctrine\ORM\Query\AST\Functions\TsConcat'
+* TS_MATCH_OP -     'Opsway\Doctrine\ORM\Query\AST\Functions\TsMatch'
+* UNNEST -          'Opsway\Doctrine\ORM\Query\AST\Functions\Unnest'
 
 | Custom Name     | PostgreSql    | Usage in DQL                         | Result in SQL                |
 |-----------------|:-------------:|--------------------------------------|------------------------------|
