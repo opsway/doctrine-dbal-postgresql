@@ -22,6 +22,11 @@
       "Opsway\\": "src/"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "OpsWay\\Tests\\": "tests/"
+    }
+  },
   "extra": {
     "branch-alias": {
       "dev-master": "1.0-dev"
