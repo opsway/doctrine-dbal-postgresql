@@ -6,3 +6,4 @@ build/
 .buildpath
 .project
 composer.lock
+coverage.xml
