@@ -1,0 +1,15 @@
+{
+  "source": {
+    "directories": [
+      "src"
+    ]
+  },
+  "timeout": 10,
+  "logs": {
+    "text": "build/infection/mutants.log",
+    "summary": "build/infection/summary.log",
+    "perMutator": "build/infection/per-mutator.md"
+  },
+  "tmpDir": "build/infection",
+  "testFramework": "phpunit"
+}
