@@ -10,11 +10,12 @@
     }
   ],
   "require": {
-    "php": ">=5.4",
+    "php": ">=5.4 || >=7.1 || >=7.2",
     "doctrine/dbal": "~2.4",
     "doctrine/orm": "~2.4"
   },
   "require-dev": {
+    "infection/infection": "^0.13.1",
     "phpunit/phpunit": "^6.5"
   },
   "autoload": {
@@ -26,6 +27,10 @@
     "psr-4": {
       "OpsWay\\Tests\\": "tests/"
     }
+  },
+  "scripts": {
+    "test": "infection --threads=$(nproc) --min-msi=88 --min-covered-msi=93 --test-framework-options='--coverage-clover=build/coverage.xml'",
+    "cover": "phpunit --coverage-clover=build/coverage.xml"
   },
   "extra": {
     "branch-alias": {
