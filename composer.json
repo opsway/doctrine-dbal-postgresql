@@ -11,7 +11,7 @@
   ],
   "require": {
     "php": ">=5.4",
-    "doctrine/dbal": "~2.4",
+    "doctrine/dbal": "~2.4 || ^3.0",
     "doctrine/orm": "~2.4"
   },
   "require-dev": {
