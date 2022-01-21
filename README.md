@@ -10,7 +10,7 @@ Usage
 
 Add to composer.json
 ```bash
-php composer.phar require opsway/doctrine-dbal-postgresql:~0.1
+php composer.phar require opsway/doctrine-dbal-postgresql ~0.8
 ```
 To use the new types you should register them using the [Custom Mapping Types](https://doctrine-dbal.readthedocs.org/en/latest/reference/types.html#custom-mapping-types) feature.
 
@@ -55,12 +55,11 @@ Otherwise PostgreSQL will not recognize the operator needed to perform this acti
 * Tip: Based on the function you want to use, check if there are any specific column type requirements. 
 
 Example query:
-```
+```php
 $result = $this->em->createQuery(
     'SELECT l FROM Foo\Bar\Baz l WHERE CONTAINS(l.metaData, :value) = true')
     ->setParameter('value', json_encode(['foo'=>'bar']))
     ->getResult();
-
 ```
 Setting the column type to ```jsonb```. 
 ```
