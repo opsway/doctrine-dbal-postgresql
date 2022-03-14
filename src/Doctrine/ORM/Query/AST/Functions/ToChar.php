@@ -26,6 +26,7 @@ class ToChar extends FunctionNode
         $parser->match(Lexer::T_CLOSE_PARENTHESIS);
     }
 
+    /** @psalm-suppress all */
     public function getSql(SqlWalker $sqlWalker) : string
     {
         return sprintf(

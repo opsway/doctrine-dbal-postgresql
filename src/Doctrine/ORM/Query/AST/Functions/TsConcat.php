@@ -14,8 +14,9 @@ use function implode;
 
 class TsConcat extends FunctionNode
 {
-    private $expr = [];
+    private mixed $expr = [];
 
+    /** @psalm-suppress all */
     public function parse(Parser $parser) : void
     {
         $lexer = $parser->getLexer();
@@ -33,6 +34,7 @@ class TsConcat extends FunctionNode
         $parser->match(Lexer::T_CLOSE_PARENTHESIS);
     }
 
+    /** @psalm-suppress all */
     public function getSql(SqlWalker $sqlWalker) : string
     {
         return implode(' || ', array_map(

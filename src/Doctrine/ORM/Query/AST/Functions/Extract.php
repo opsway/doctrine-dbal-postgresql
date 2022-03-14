@@ -11,12 +11,12 @@ use Doctrine\ORM\Query\SqlWalker;
 
 use function sprintf;
 
-/** @psalm-suppress all */
 class Extract extends FunctionNode
 {
     private mixed $field;
     private mixed $value;
 
+    /** @psalm-suppress all */
     public function parse(Parser $parser) : void
     {
         $parser->match(Lexer::T_IDENTIFIER);
@@ -32,6 +32,7 @@ class Extract extends FunctionNode
         $parser->match(Lexer::T_CLOSE_PARENTHESIS);
     }
 
+    /** @psalm-suppress all */
     public function getSql(SqlWalker $sqlWalker) : string
     {
         return sprintf(

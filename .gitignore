@@ -2,6 +2,7 @@
 bin/
 vendor/
 build/
+data/
 .idea/
 .buildpath
 .project

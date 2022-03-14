@@ -26,20 +26,21 @@ class ArrayInt extends Type
     }
 
     /**
-     * @param array|null $array
+     * @param array|null $value
+     * @psalm-suppress all
      */
-    public function convertToDatabaseValue($array, AbstractPlatform $platform) : ?string
+    public function convertToDatabaseValue($value, AbstractPlatform $platform) : ?string
     {
-        if ($array === null) {
+        if ($value === null) {
             return null;
         }
 
         $convertArray = [];
-        foreach ($array as $value) {
-            if (! is_numeric($value)) {
+        foreach ($value as $valueItem) {
+            if (! is_numeric($valueItem)) {
                 continue;
             }
-            $convertArray[] = (int) $value;
+            $convertArray[] = (int) $valueItem;
         }
 
         return '{' . implode(',', $convertArray) . '}';
@@ -47,6 +48,7 @@ class ArrayInt extends Type
 
     /**
      * @param string|null $value
+     * @psalm-suppress all
      */
     public function convertToPHPValue($value, AbstractPlatform $platform) : ?array
     {

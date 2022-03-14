@@ -25,6 +25,7 @@ class Inet extends Type
 
     /**
      * @param string|null $value
+     * @psalm-suppress all
      */
     public function convertToDatabaseValue($value, AbstractPlatform $platform) : ?string
     {

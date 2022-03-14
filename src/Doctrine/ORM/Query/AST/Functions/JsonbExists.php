@@ -11,13 +11,11 @@ use Doctrine\ORM\Query\SqlWalker;
 
 use function sprintf;
 
-/** @psalm-suppress all */
 class JsonbExists extends FunctionNode
 {
     private mixed $expr1;
     private mixed $expr2;
 
-    /** @psalm-suppress all */
     public function parse(Parser $parser)
     {
         $parser->match(Lexer::T_IDENTIFIER);

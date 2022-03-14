@@ -32,6 +32,7 @@ class TsVector extends Type
 
     /**
      * @param string|null $value
+     * @psalm-suppress all
      */
     public function convertToPHPValue($value, AbstractPlatform $platform) : array
     {
@@ -56,6 +57,7 @@ class TsVector extends Type
 
     /**
      * @param array|string $value
+     * @psalm-suppress all
      */
     public function convertToDatabaseValue($value, AbstractPlatform $platform) : string
     {

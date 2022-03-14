@@ -11,7 +11,6 @@ use Doctrine\ORM\Query\SqlWalker;
 
 use function sprintf;
 
-/** @psalm-suppress all */
 class Cast extends FunctionNode
 {
     private mixed $expr1;

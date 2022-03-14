@@ -27,24 +27,25 @@ class ArrayText extends Type
     }
 
     /**
-     * @param array|null $array
+     * @param array|null $value
+     * @psalm-suppress all
      */
-    public function convertToDatabaseValue($array, AbstractPlatform $platform) : ?string
+    public function convertToDatabaseValue($value, AbstractPlatform $platform) : ?string
     {
-        if ($array === null) {
+        if ($value === null) {
             return null;
         }
 
         $convertArray = [];
-        foreach ($array as $value) {
-            if ($value === null) {
-                $value = 'NULL';
+        foreach ($value as $valueItem) {
+            if ($valueItem === null) {
+                $valueItem = 'NULL';
             }
-            if ($value === '') {
-                $value = '""';
+            if ($valueItem === '') {
+                $valueItem = '""';
             }
 
-            $convertArray[] = '"' . addcslashes($value, '"') . '"';
+            $convertArray[] = '"' . addcslashes($valueItem, '"') . '"';
         }
 
         return '{' . implode(',', $convertArray) . '}';
@@ -52,6 +53,7 @@ class ArrayText extends Type
 
     /**
      * @param string|null $value
+     * @psalm-suppress all
      */
     public function convertToPHPValue($value, AbstractPlatform $platform) : ?array
     {
