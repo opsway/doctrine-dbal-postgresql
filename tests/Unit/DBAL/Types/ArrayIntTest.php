@@ -1,33 +1,39 @@
 <?php
 
-namespace Opsway\Tests\Doctrine\DBAL\Types;
+declare(strict_types=1);
+
+namespace OpsWay\Tests\Unit\DBAL\Types;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 use Opsway\Doctrine\DBAL\Types\ArrayInt;
+use Opsway\Doctrine\DBAL\Types\Types;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 class ArrayIntTest extends TestCase
 {
-    public static function setUpBeforeClass()
+    use ProphecyTrait;
+
+    public static function setUpBeforeClass() : void
     {
-        Type::addType('integer[]', ArrayInt::class);
+        Type::addType(Types::ARRAY_INT, ArrayInt::class);
     }
 
-    public function testGetName()
+    public function testGetName() : void
     {
-        $arrayInt = ArrayInt::getType('integer[]');
-        $this->assertEquals('integer[]', $arrayInt->getName());
+        $arrayInt = ArrayInt::getType(Types::ARRAY_INT);
+        $this->assertEquals(Types::ARRAY_INT, $arrayInt->getName());
     }
 
-    public function testGetSQLDeclaration()
+    public function testGetSQLDeclaration() : void
     {
-        $arrayInt = ArrayInt::getType('integer[]');
+        $arrayInt = ArrayInt::getType(Types::ARRAY_INT);
         $platform = $this->prophesize(AbstractPlatform::class);
 
         $platform->getDoctrineTypeMapping()
             ->shouldBeCalled()
-            ->withArguments(['integer[]'])
+            ->withArguments([Types::ARRAY_INT])
             ->willReturn('test');
 
         $this->assertEquals(
@@ -36,10 +42,11 @@ class ArrayIntTest extends TestCase
         );
     }
 
-    public function testConvertToDatabaseValue()
+    public function testConvertToDatabaseValue() : void
     {
-        $arrayInt = ArrayInt::getType('integer[]');
+        $arrayInt   = ArrayInt::getType(Types::ARRAY_INT);
         $wrongArray = null;
+        $emptyArray = [];
         $rightArray = [1, 2, 3, 'test'];
 
         $platform = $this->prophesize(AbstractPlatform::class);
@@ -50,17 +57,22 @@ class ArrayIntTest extends TestCase
         );
 
         $this->assertEquals(
+            '{}',
+            $arrayInt->convertToDatabaseValue($emptyArray, $platform->reveal())
+        );
+
+        $this->assertEquals(
             '{1,2,3}',
             $arrayInt->convertToDatabaseValue($rightArray, $platform->reveal())
         );
     }
 
-    public function testConvertToPHPValue()
+    public function testConvertToPHPValue() : void
     {
-        $arrayInt = ArrayInt::getType('integer[]');
-        $wrongValue = null;
-        $secondWrongValue = '{}';
-        $rightValue = '{1,2,3}';
+        $arrayInt        = ArrayInt::getType(Types::ARRAY_INT);
+        $wrongValue      = null;
+        $emptyArrayValue = '{}';
+        $rightValue      = '{1,2,3}';
 
         $platform = $this->prophesize(AbstractPlatform::class);
 
@@ -70,8 +82,8 @@ class ArrayIntTest extends TestCase
         );
 
         $this->assertEquals(
-            null,
-            $arrayInt->convertToPHPValue($secondWrongValue, $platform->reveal())
+            [],
+            $arrayInt->convertToPHPValue($emptyArrayValue, $platform->reveal())
         );
 
         $this->assertEquals(

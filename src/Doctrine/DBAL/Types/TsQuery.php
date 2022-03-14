@@ -1,30 +1,35 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Opsway\Doctrine\DBAL\Types;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 
+use function sprintf;
+
 class TsQuery extends Type
 {
-    const TS_QUERY = 'tsquery';
-
-    public function getName()
+    public function getName() : string
     {
-        return 'tsquery';
+        return Types::TS_QUERY;
     }
 
-    public function canRequireSQLConversion()
+    public function canRequireSQLConversion() : bool
     {
         return true;
     }
 
-    public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
+    public function getSQLDeclaration(array $column, AbstractPlatform $platform) : string
     {
-        return $platform->getDoctrineTypeMapping(static::TS_QUERY);
+        return $platform->getDoctrineTypeMapping(Types::TS_QUERY);
     }
 
-    public function convertToDatabaseValueSQL($sqlExpr, AbstractPlatform $platform)
+    /**
+     * @param string $sqlExpr
+     */
+    public function convertToDatabaseValueSQL($sqlExpr, AbstractPlatform $platform) : string
     {
         return sprintf('plainto_tsquery(%s)', $sqlExpr);
     }

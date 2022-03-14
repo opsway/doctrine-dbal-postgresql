@@ -1,25 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Opsway\Doctrine\DBAL\Types;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Types\JsonArrayType;
+use Doctrine\DBAL\Types\JsonType;
 
-/**
- * @author Sérgio Rafael Siqueira <sergio@inbep.com.br>
- */
-class Jsonb extends JsonArrayType
+class Jsonb extends JsonType
 {
-    const JSONB = 'jsonb';
-
-    public function getName()
+    public function getName() : string
     {
-        return static::JSONB;
+        return Types::JSONB;
     }
 
-    public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
+    public function getSQLDeclaration(array $column, AbstractPlatform $platform) : string
     {
-        return $platform->getDoctrineTypeMapping(static::JSONB);
+        return $platform->getDoctrineTypeMapping(Types::JSONB);
     }
-
 }

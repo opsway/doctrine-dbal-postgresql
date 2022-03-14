@@ -1,56 +1,62 @@
 <?php
 
-namespace Opsway\Tests\Doctrine\DBAL\Types;
+declare(strict_types=1);
+
+namespace OpsWay\Tests\Unit\DBAL\Types;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 use Opsway\Doctrine\DBAL\Types\TsQuery;
+use Opsway\Doctrine\DBAL\Types\Types;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 class TsQueryTest extends TestCase
 {
-    public static function setUpBeforeClass()
+    use ProphecyTrait;
+
+    public static function setUpBeforeClass() : void
     {
-        Type::addType('tsquery', TsQuery::class);
+        Type::addType(Types::TS_QUERY, TsQuery::class);
     }
 
-    public function testGetName()
+    public function testGetName() : void
     {
-        $tsquery = TsQuery::getType('tsquery');
-        $this->assertEquals('tsquery', $tsquery->getName());
+        $tsQuery = TsQuery::getType(Types::TS_QUERY);
+        $this->assertEquals(Types::TS_QUERY, $tsQuery->getName());
     }
 
-    public function testGetSQLDeclaration()
+    public function testGetSQLDeclaration() : void
     {
-        $tsquery = TsQuery::getType('tsquery');
+        $tsQuery  = TsQuery::getType(Types::TS_QUERY);
         $platform = $this->prophesize(AbstractPlatform::class);
 
         $platform->getDoctrineTypeMapping()
             ->shouldBeCalled()
-            ->withArguments(['tsquery'])
+            ->withArguments([Types::TS_QUERY])
             ->willReturn('test');
 
         $this->assertEquals(
             'test',
-            $tsquery->getSQLDeclaration([], $platform->reveal())
+            $tsQuery->getSQLDeclaration([], $platform->reveal())
         );
     }
 
-    public function testConvertToDatabaseValueSQL()
+    public function testConvertToDatabaseValueSQL() : void
     {
-        $tsquery = TsQuery::getType('tsquery');
+        $tsQuery  = TsQuery::getType(Types::TS_QUERY);
         $platform = $this->prophesize(AbstractPlatform::class);
 
         $this->assertEquals(
             'plainto_tsquery(test)',
-            $tsquery->convertToDatabaseValueSQL('test', $platform->reveal())
+            $tsQuery->convertToDatabaseValueSQL('test', $platform->reveal())
         );
     }
 
-    public function testCanRequireSQLConversion()
+    public function testCanRequireSQLConversion() : void
     {
-        $tsquery = TsQuery::getType('tsquery');
+        $tsQuery = TsQuery::getType(Types::TS_QUERY);
 
-        $this->assertTrue($tsquery->canRequireSQLConversion());
+        $this->assertTrue($tsQuery->canRequireSQLConversion());
     }
 }

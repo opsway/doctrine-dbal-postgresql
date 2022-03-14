@@ -1,45 +1,57 @@
 <?php
 
-namespace Opsway\Tests\Doctrine\DBAL\Types;
+declare(strict_types=1);
+
+namespace OpsWay\Tests\Unit\DBAL\Types;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
 use Doctrine\DBAL\Types\Type;
 use Opsway\Doctrine\DBAL\Types\TsVector;
+use Opsway\Doctrine\DBAL\Types\Types;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 class TsVectorTest extends TestCase
 {
-    public static function setUpBeforeClass()
+    use ProphecyTrait;
+
+    public static function setUpBeforeClass() : void
     {
-        Type::addType('tsvector', TsVector::class);
+        Type::addType(Types::TS_VECTOR, TsVector::class);
     }
 
-    public function testGetName()
+    public function testGetName() : void
     {
-        $tsvector = TsVector::getType('tsvector');
-        $this->assertEquals('tsvector', $tsvector->getName());
+        $tsvector = TsVector::getType(Types::TS_VECTOR);
+        $this->assertEquals(Types::TS_VECTOR, $tsvector->getName());
     }
 
-    public function testGetSQLDeclaration()
+    public function testGetSQLDeclaration() : void
     {
-        $tsvector = TsVector::getType('tsvector');
-        $platform = $this->prophesize(AbstractPlatform::class);
+        $tsvector = TsVector::getType(Types::TS_VECTOR);
+        $platform = $this->prophesize(PostgreSQLPlatform::class);
+
+        $platform->getDoctrineTypeMapping()
+            ->shouldBeCalled()
+            ->withArguments([Types::TS_VECTOR])
+            ->willReturn('test');
 
         $this->assertEquals(
-            'TSVECTOR',
+            'test',
             $tsvector->getSQLDeclaration([], $platform->reveal())
         );
     }
 
-    public function testCanRequireSQLConversion()
+    public function testCanRequireSQLConversion() : void
     {
-        $tsvector = TsVector::getType('tsvector');
+        $tsvector = TsVector::getType(Types::TS_VECTOR);
         $this->assertEquals(true, $tsvector->canRequireSQLConversion());
     }
 
-    public function testConvertToPHPValue()
+    public function testConvertToPHPValue() : void
     {
-        $tsvector = TsVector::getType('tsvector');
+        $tsvector = TsVector::getType(Types::TS_VECTOR);
         $platform = $this->prophesize(AbstractPlatform::class);
 
         $emptyValue = null;
@@ -56,9 +68,9 @@ class TsVectorTest extends TestCase
         );
     }
 
-    public function testConvertToPHPValueSQL()
+    public function testConvertToPHPValueSQL() : void
     {
-        $tsvector = TsVector::getType('tsvector');
+        $tsvector = TsVector::getType(Types::TS_VECTOR);
         $platform = $this->prophesize(AbstractPlatform::class);
 
         $this->assertEquals(
@@ -67,9 +79,9 @@ class TsVectorTest extends TestCase
         );
     }
 
-    public function testConvertToDatabaseValueSQL()
+    public function testConvertToDatabaseValueSQL() : void
     {
-        $tsvector = TsVector::getType('tsvector');
+        $tsvector = TsVector::getType(Types::TS_VECTOR);
         $platform = $this->prophesize(AbstractPlatform::class);
 
         $this->assertEquals(
@@ -78,9 +90,9 @@ class TsVectorTest extends TestCase
         );
     }
 
-    public function testConvertToDatabaseValue()
+    public function testConvertToDatabaseValue() : void
     {
-        $tsvector = TsVector::getType('tsvector');
+        $tsvector = TsVector::getType(Types::TS_VECTOR);
         $platform = $this->prophesize(AbstractPlatform::class);
 
         $value = [1, 2, 3];

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OpsWay\Tests;
 
 use Doctrine\ORM\EntityManager;
@@ -16,9 +18,9 @@ class EmTestCase extends TestCase
         return [];
     }
 
-    protected function setUp()
+    protected function setUp() : void
     {
-        $config = Setup::createConfiguration(true);
+        $config     = Setup::createConfiguration(true);
         $driverImpl = $config->newDefaultAnnotationDriver([__DIR__]);
         $config->setMetadataDriverImpl($driverImpl);
         $this->em = EntityManager::create([
@@ -31,4 +33,3 @@ class EmTestCase extends TestCase
         }
     }
 }
-

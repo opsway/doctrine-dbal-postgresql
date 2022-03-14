@@ -12,9 +12,9 @@ Add to composer.json
 ```bash
 php composer.phar require opsway/doctrine-dbal-postgresql ~0.8
 ```
-To use the new types you should register them using the [Custom Mapping Types](https://doctrine-dbal.readthedocs.org/en/latest/reference/types.html#custom-mapping-types) feature.
+To use the new types you should register them using the [Custom Mapping Types](https://doctrine-project.org/projects/doctrine-dbal/en/latest/reference/types.html#custom-mapping-types) feature.
 
-To use the new functions you should register them using the [DQL User Defined Functions](http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/cookbook/dql-user-defined-functions.html) feature.
+To use the new functions you should register them using the [DQL User Defined Functions](https://www.doctrine-project.org/projects/doctrine-orm/en/latest/cookbook/dql-user-defined-functions.html) feature.
 
 #### Custom Types
 
@@ -50,7 +50,7 @@ To use the new functions you should register them using the [DQL User Defined Fu
 * JSONB_ARRAY_ELEM_TEXT - 'OpsWay\Doctrine\ORM\Query\AST\Functions\JsonbArrayElementsText'
 
 ### Custom DQL function usage
-For an example the CONTAINS function requires your table column in your datbase to be of the type ```jsonb```.
+For an example the CONTAINS function requires your table column in your database to be of the type ```jsonb```.
 Otherwise PostgreSQL will not recognize the operator needed to perform this action. (@>) 
 * Tip: Based on the function you want to use, check if there are any specific column type requirements. 
 
