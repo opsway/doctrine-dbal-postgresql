@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Opsway\Doctrine\ORM\Query\AST\Functions;
+namespace OpsWay\Doctrine\ORM\Query\AST\Functions;
 
 use Doctrine\ORM\Query\AST\Functions\FunctionNode;
 use Doctrine\ORM\Query\Lexer;
@@ -13,8 +13,13 @@ use function sprintf;
 
 class Extract extends FunctionNode
 {
-    private mixed $field;
-    private mixed $value;
+    /** @var mixed */
+    /** @psalm-suppress all */
+    private $field;
+
+    /** @var mixed */
+    /** @psalm-suppress all */
+    private $value;
 
     /** @psalm-suppress all */
     public function parse(Parser $parser) : void

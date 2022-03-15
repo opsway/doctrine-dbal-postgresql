@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Opsway\Doctrine\ORM\Query\AST\Functions;
+namespace OpsWay\Doctrine\ORM\Query\AST\Functions;
 
 use Doctrine\ORM\Query\AST\Functions\FunctionNode;
+use Doctrine\ORM\Query\AST\Node;
 use Doctrine\ORM\Query\Lexer;
 use Doctrine\ORM\Query\Parser;
 use Doctrine\ORM\Query\SqlWalker;
@@ -13,8 +14,13 @@ use function sprintf;
 
 class ToChar extends FunctionNode
 {
-    public mixed $dateExpression;
-    public mixed $patternExpression;
+    /** @var Node */
+    /** @psalm-suppress all */
+    public $dateExpression;
+
+    /** @var Node */
+    /** @psalm-suppress all */
+    public $patternExpression;
 
     public function parse(Parser $parser) : void
     {

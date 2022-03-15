@@ -7,8 +7,8 @@ namespace OpsWay\Tests\Unit\DBAL\Types;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
 use Doctrine\DBAL\Types\Type;
-use Opsway\Doctrine\DBAL\Types\TsVector;
-use Opsway\Doctrine\DBAL\Types\Types;
+use OpsWay\Doctrine\DBAL\Types\TsVector;
+use OpsWay\Doctrine\DBAL\Types\Types;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 

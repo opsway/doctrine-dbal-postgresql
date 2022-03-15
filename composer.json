@@ -10,7 +10,7 @@
     }
   ],
   "require": {
-    "php": ">=8.0",
+    "php": "^7.3 || ^8.0",
     "doctrine/dbal": "^3.2",
     "doctrine/orm": "^2.10"
   },
@@ -18,16 +18,16 @@
     "phpunit/phpunit": "^9.5",
     "opsway/psr12-strict-coding-standard": "^0.7.0",
     "phpspec/prophecy-phpunit": "^2.0",
-    "symfony/cache": "^6.0",
+    "symfony/cache": "^4.4 || ^5.4 || ^6.0",
     "doctrine/annotations": "^1.13",
-    "lctrs/psalm-psr-container-plugin": "^1.7",
+    "lctrs/psalm-psr-container-plugin": "^1.6",
     "psalm/plugin-phpunit": "^0.16.1",
     "vimeo/psalm": "^4.22",
     "weirdan/doctrine-psalm-plugin": "^2.0"
   },
   "autoload": {
     "psr-4": {
-      "Opsway\\": "src/"
+      "OpsWay\\": "src/"
     }
   },
   "autoload-dev": {

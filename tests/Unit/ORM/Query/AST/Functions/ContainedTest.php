@@ -8,7 +8,7 @@ use Doctrine\ORM\Query\AST\ParenthesisExpression;
 use Doctrine\ORM\Query\Lexer;
 use Doctrine\ORM\Query\Parser;
 use Doctrine\ORM\Query\SqlWalker;
-use Opsway\Doctrine\ORM\Query\AST\Functions\Contained;
+use OpsWay\Doctrine\ORM\Query\AST\Functions\Contained;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 

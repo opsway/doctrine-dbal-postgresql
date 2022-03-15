@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Opsway\Doctrine\ORM\Query\AST\Functions;
+namespace OpsWay\Doctrine\ORM\Query\AST\Functions;
 
 use Doctrine\ORM\Query\AST\Functions\FunctionNode;
 use Doctrine\ORM\Query\Lexer;
@@ -14,7 +14,8 @@ use function implode;
 
 class TsConcat extends FunctionNode
 {
-    private mixed $expr = [];
+    /** @var array */
+    private $expr = [];
 
     /** @psalm-suppress all */
     public function parse(Parser $parser) : void

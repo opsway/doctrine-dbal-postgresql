@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Opsway\Doctrine\DBAL\Types;
+namespace OpsWay\Doctrine\DBAL\Types;
 
 final class Types
 {

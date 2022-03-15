@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace OpsWay\Tests\Unit\ORM\Query\AST\Functions;
 
-use Opsway\Doctrine\ORM\Query\AST\Functions\TsConcat;
+use OpsWay\Doctrine\ORM\Query\AST\Functions\TsConcat;
 use OpsWay\Tests\EmTestCase;
 
 class TsConcatTest extends EmTestCase

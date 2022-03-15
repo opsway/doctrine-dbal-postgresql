@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Opsway\Doctrine\ORM\Query\AST\Functions;
+namespace OpsWay\Doctrine\ORM\Query\AST\Functions;
 
 use Doctrine\ORM\Query\AST\Functions\FunctionNode;
+use Doctrine\ORM\Query\AST\InputParameter;
+use Doctrine\ORM\Query\AST\Node;
 use Doctrine\ORM\Query\Lexer;
 use Doctrine\ORM\Query\Parser;
 use Doctrine\ORM\Query\SqlWalker;
@@ -13,8 +15,13 @@ use function sprintf;
 
 class Contains extends FunctionNode
 {
-    private mixed $expr1;
-    private mixed $expr2;
+    /** @var Node */
+    /** @psalm-suppress all */
+    private $expr1;
+
+    /** @var InputParameter */
+    /** @psalm-suppress all */
+    private $expr2;
 
     public function parse(Parser $parser) : void
     {
