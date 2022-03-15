@@ -1,65 +1,45 @@
 <?php
 
-/**
- * This file is part of Opensoft Doctrine Postgres Types.
- *
- * Copyright (c) 2013 Opensoft (http://opensoftdev.com)
- */
-namespace Opsway\Doctrine\DBAL\Types;
+declare(strict_types=1);
+
+namespace OpsWay\Doctrine\DBAL\Types;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 
-/**
- * PHP type is array
- * PostgresType is tsvector.
- *
- * https://gist.github.com/3129096
- *
- * @author Richard Fullmer <richard.fullmer@opensoftdev.com>
- */
+use function explode;
+use function implode;
+use function is_array;
+use function sprintf;
+use function trim;
+
 class TsVector extends Type
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
+    public function getName() : string
     {
-        return 'tsvector';
+        return Types::TS_VECTOR;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function canRequireSQLConversion()
+    public function canRequireSQLConversion() : bool
     {
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
+    public function getSQLDeclaration(array $column, AbstractPlatform $platform) : string
     {
-        return 'TSVECTOR';
+        return $platform->getDoctrineTypeMapping(Types::TS_VECTOR);
     }
 
     /**
-     * Converts a value from its database representation to its PHP representation
-     * of this type.
-     *
-     * @param mixed            $value    The value to convert.
-     * @param AbstractPlatform $platform The currently used database platform.
-     *
-     * @return mixed The PHP representation of the value.
+     * @param string|null $value
+     * @psalm-suppress all
      */
-    public function convertToPHPValue($value, AbstractPlatform $platform)
+    public function convertToPHPValue($value, AbstractPlatform $platform) : array
     {
-        // Wish there was a database way to make this cleaner... implement in convertToPHPValueSQL
-        $terms = array();
-        if (!empty($value)) {
+        $terms = [];
+        if (! empty($value)) {
             foreach (explode(' ', $value) as $item) {
-                list($term, $_) = explode(':', $item);
+                [$term]  = explode(':', $item);
                 $terms[] = trim($term, '\'');
             }
         }
@@ -68,41 +48,18 @@ class TsVector extends Type
     }
 
     /**
-     * Modifies the SQL expression (identifier, parameter) to convert to a PHP value.
-     *
-     * @param string           $value
-     * @param AbstractPlatform $platform
-     *
-     * @return string
+     * @param string $sqlExpr
      */
-    public function convertToPHPValueSQL($value, $platform)
-    {
-        return $value;
-    }
-
-    /**
-     * Modifies the SQL expression (identifier, parameter) to convert to a database value.
-     *
-     * @param string           $sqlExpr
-     * @param AbstractPlatform $platform
-     *
-     * @return string
-     */
-    public function convertToDatabaseValueSQL($sqlExpr, AbstractPlatform $platform)
+    public function convertToDatabaseValueSQL($sqlExpr, AbstractPlatform $platform) : string
     {
         return sprintf('to_tsvector(%s)', $sqlExpr);
     }
 
     /**
-     * Converts a value from its PHP representation to its database representation
-     * of this type.
-     *
-     * @param mixed            $value    The value to convert.
-     * @param AbstractPlatform $platform The currently used database platform.
-     *
-     * @return mixed The database representation of the value.
+     * @param array|string $value
+     * @psalm-suppress all
      */
-    public function convertToDatabaseValue($value, AbstractPlatform $platform)
+    public function convertToDatabaseValue($value, AbstractPlatform $platform) : string
     {
         if (is_array($value)) {
             $value = implode(' ', $value);

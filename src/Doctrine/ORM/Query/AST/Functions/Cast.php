@@ -12,17 +12,25 @@ use Doctrine\ORM\Query\SqlWalker;
 
 use function sprintf;
 
-class ArrayAggregate extends FunctionNode
+class Cast extends FunctionNode
 {
-    /** @var Node|string */
+    /** @var Node */
     /** @psalm-suppress all */
     private $expr1;
 
-    public function parse(Parser $parser) : void
+    /** @var string|null */
+    /** @psalm-suppress all */
+    private $expr2;
+
+    /** @psalm-suppress all */
+    public function parse(Parser $parser)
     {
         $parser->match(Lexer::T_IDENTIFIER);
         $parser->match(Lexer::T_OPEN_PARENTHESIS);
-        $this->expr1 = $parser->ArithmeticPrimary();
+        $this->expr1 = $parser->StringPrimary();
+        $parser->match(Lexer::T_AS);
+        $parser->match(Lexer::T_IDENTIFIER);
+        $this->expr2 = $parser->getLexer()->token['value'];
         $parser->match(Lexer::T_CLOSE_PARENTHESIS);
     }
 
@@ -30,8 +38,9 @@ class ArrayAggregate extends FunctionNode
     public function getSql(SqlWalker $sqlWalker) : string
     {
         return sprintf(
-            'array_agg(%s)',
-            $this->expr1->dispatch($sqlWalker)
+            'CAST(%s AS %s)',
+            $this->expr1->dispatch($sqlWalker),
+            $this->expr2
         );
     }
 }

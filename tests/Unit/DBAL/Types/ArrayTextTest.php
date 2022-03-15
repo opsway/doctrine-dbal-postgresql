@@ -1,33 +1,39 @@
 <?php
 
-namespace Opsway\Tests\Doctrine\DBAL\Types;
+declare(strict_types=1);
+
+namespace OpsWay\Tests\Unit\DBAL\Types;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
-use Opsway\Doctrine\DBAL\Types\ArrayText;
+use OpsWay\Doctrine\DBAL\Types\ArrayText;
+use OpsWay\Doctrine\DBAL\Types\Types;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 class ArrayTextTest extends TestCase
 {
-    public static function setUpBeforeClass()
+    use ProphecyTrait;
+
+    public static function setUpBeforeClass() : void
     {
-        Type::addType('text[]', ArrayText::class);
+        Type::addType(Types::ARRAY_TEXT, ArrayText::class);
     }
 
-    public function testGetName()
+    public function testGetName() : void
     {
-        $arrayInt = ArrayText::getType('text[]');
-        $this->assertEquals('text[]', $arrayInt->getName());
+        $arrayInt = ArrayText::getType(Types::ARRAY_TEXT);
+        $this->assertEquals(Types::ARRAY_TEXT, $arrayInt->getName());
     }
 
-    public function testGetSQLDeclaration()
+    public function testGetSQLDeclaration() : void
     {
-        $arrayText = ArrayText::getType('text[]');
-        $platform = $this->prophesize(AbstractPlatform::class);
+        $arrayText = ArrayText::getType(Types::ARRAY_TEXT);
+        $platform  = $this->prophesize(AbstractPlatform::class);
 
         $platform->getDoctrineTypeMapping()
             ->shouldBeCalled()
-            ->withArguments(['text[]'])
+            ->withArguments([Types::ARRAY_TEXT])
             ->willReturn('test');
 
         $this->assertEquals(
@@ -36,12 +42,13 @@ class ArrayTextTest extends TestCase
         );
     }
 
-    public function testConvertToDatabaseValue()
+    public function testConvertToDatabaseValue() : void
     {
-        $arrayText = ArrayText::getType('text[]');
-        $platform = $this->prophesize(AbstractPlatform::class);
+        $arrayText = ArrayText::getType(Types::ARRAY_TEXT);
+        $platform  = $this->prophesize(AbstractPlatform::class);
 
         $wrongArray = null;
+        $emptyArray = [];
         $validArray = ['test', null, '', 'test'];
 
         $this->assertEquals(
@@ -50,19 +57,24 @@ class ArrayTextTest extends TestCase
         );
 
         $this->assertEquals(
+            '{}',
+            $arrayText->convertToDatabaseValue($emptyArray, $platform->reveal())
+        );
+
+        $this->assertEquals(
             '{"test","NULL","\"\"","test"}',
             $arrayText->convertToDatabaseValue($validArray, $platform->reveal())
         );
     }
 
-    public function testConvertToPHPValue()
+    public function testConvertToPHPValue() : void
     {
-        $arrayText = ArrayText::getType('text[]');
-        $platform = $this->prophesize(AbstractPlatform::class);
+        $arrayText = ArrayText::getType(Types::ARRAY_TEXT);
+        $platform  = $this->prophesize(AbstractPlatform::class);
 
-        $wrongValue = null;
-        $anotherWrongValue = '{}';
-        $validValue = '{"test","NULL","\"\"","test"}';
+        $wrongValue      = null;
+        $emptyArrayValue = '{}';
+        $validValue      = '{"test","NULL","\"\"","test"}';
 
         $this->assertEquals(
             null,
@@ -70,8 +82,8 @@ class ArrayTextTest extends TestCase
         );
 
         $this->assertEquals(
-            null,
-            $arrayText->convertToPHPValue($anotherWrongValue, $platform->reveal())
+            [],
+            $arrayText->convertToPHPValue($emptyArrayValue, $platform->reveal())
         );
 
         $this->assertEquals(

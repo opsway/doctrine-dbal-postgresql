@@ -1,25 +1,21 @@
 <?php
 
-namespace Opsway\Doctrine\DBAL\Types;
+declare(strict_types=1);
+
+namespace OpsWay\Doctrine\DBAL\Types;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\TextType;
 
-/**
- * @author Sérgio Rafael Siqueira <sergio@inbep.com.br>
- */
 class Citext extends TextType
 {
-    const CITEXT = 'citext';
-
-    public function getName()
+    public function getName() : string
     {
-        return static::CITEXT;
+        return Types::CITEXT;
     }
 
-    public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
+    public function getSQLDeclaration(array $column, AbstractPlatform $platform) : string
     {
-        return $platform->getDoctrineTypeMapping(static::CITEXT);
+        return $platform->getDoctrineTypeMapping(Types::CITEXT);
     }
-
 }

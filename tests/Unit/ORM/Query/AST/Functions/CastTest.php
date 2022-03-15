@@ -8,41 +8,43 @@ use Doctrine\ORM\Query\AST\ParenthesisExpression;
 use Doctrine\ORM\Query\Lexer;
 use Doctrine\ORM\Query\Parser;
 use Doctrine\ORM\Query\SqlWalker;
-use OpsWay\Doctrine\ORM\Query\AST\Functions\ArrayAppend;
+use OpsWay\Doctrine\ORM\Query\AST\Functions\Cast;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 
-class ArrayAppendTest extends TestCase
+class CastTest extends TestCase
 {
     use ProphecyTrait;
 
-    /** @var ArrayAppend */
-    private $arrayAppend;
+    /** @var Cast */
+    private $cast;
 
     public function setUp() : void
     {
-        $this->arrayAppend = new ArrayAppend('test');
+        $this->cast = new Cast('test');
     }
 
     public function testFunction() : void
     {
-        $parser = $this->prophesize(Parser::class);
-        $expr   = $this->prophesize(ParenthesisExpression::class);
+        $parser      = $this->prophesize(Parser::class);
+        $expr        = $this->prophesize(ParenthesisExpression::class);
+        $sqlWalker   = $this->prophesize(SqlWalker::class);
+        $lexer       = $this->prophesize(Lexer::class);
+        $lexerEntity = $lexer->reveal();
 
         $parser->match()->shouldBeCalled()->withArguments([Lexer::T_IDENTIFIER]);
         $parser->match()->shouldBeCalled()->withArguments([Lexer::T_OPEN_PARENTHESIS]);
         $parser->StringPrimary()->shouldBeCalled()->willReturn($expr->reveal());
-        $parser->match()->shouldBeCalled()->withArguments([Lexer::T_COMMA]);
-        $parser->InputParameter()->shouldBeCalled()->willReturn($expr->reveal());
-        $parser->match()->shouldBeCalled()->withArguments([Lexer::T_CLOSE_PARENTHESIS]);
-        $sqlWalker = $this->prophesize(SqlWalker::class);
+        $parser->match()->shouldBeCalled()->withArguments([Lexer::T_AS]);
+        $parser->match()->shouldBeCalled()->withArguments([Lexer::T_IDENTIFIER]);
 
-        $this->arrayAppend->parse($parser->reveal());
+        $lexerEntity->token['value'] = 'test';
+        $parser->getLexer()->shouldBeCalled()->willReturn($lexerEntity);
+        $parser->match()->shouldBeCalled()->withArguments([Lexer::T_CLOSE_PARENTHESIS]);
+
+        $this->cast->parse($parser->reveal());
         $expr->dispatch()->shouldBeCalled()->withArguments([$sqlWalker->reveal()])->willReturn('test');
-        $sqlWalker->walkInputParameter()->shouldBeCalled()->withArguments([$expr->reveal()])->willReturn('test');
-        $this->assertEquals(
-            'array_append(test, test)',
-            $this->arrayAppend->getSql($sqlWalker->reveal())
-        );
+
+        $this->assertEquals('CAST(test AS test)', $this->cast->getSql($sqlWalker->reveal()));
     }
 }

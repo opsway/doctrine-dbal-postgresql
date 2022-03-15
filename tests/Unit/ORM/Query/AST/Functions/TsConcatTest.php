@@ -1,9 +1,11 @@
 <?php
 
-namespace OpsWay\Tests\Doctrine\ORM\Query\AST\Functions;
+declare(strict_types=1);
 
+namespace OpsWay\Tests\Unit\ORM\Query\AST\Functions;
+
+use OpsWay\Doctrine\ORM\Query\AST\Functions\TsConcat;
 use OpsWay\Tests\EmTestCase;
-use Opsway\Doctrine\ORM\Query\AST\Functions\TsConcat;
 
 class TsConcatTest extends EmTestCase
 {
@@ -15,13 +17,13 @@ class TsConcatTest extends EmTestCase
     }
 
     /** @dataProvider functionData */
-    public function testFunction(string $dql, string $sql)
+    public function testFunction(string $dql, string $sql) : void
     {
         $query = $this->em->createQuery($dql);
         $this->assertEquals($sql, $query->getSql());
     }
 
-    public function functionData()
+    public function functionData() : array
     {
         return [
             [
@@ -35,4 +37,3 @@ class TsConcatTest extends EmTestCase
         ];
     }
 }
-

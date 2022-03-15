@@ -1,33 +1,39 @@
 <?php
 
-namespace Opsway\Tests\Doctrine\DBAL\Types;
+declare(strict_types=1);
+
+namespace OpsWay\Tests\Unit\DBAL\Types;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
-use Opsway\Doctrine\DBAL\Types\Inet;
+use OpsWay\Doctrine\DBAL\Types\Inet;
+use OpsWay\Doctrine\DBAL\Types\Types;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 class InetTest extends TestCase
 {
-    public static function setUpBeforeClass()
+    use ProphecyTrait;
+
+    public static function setUpBeforeClass() : void
     {
-        Type::addType('inet', Inet::class);
+        Type::addType(Types::INET, Inet::class);
     }
 
-    public function testGetName()
+    public function testGetName() : void
     {
-        $inet = Inet::getType('inet');
-        $this->assertEquals('inet', $inet->getName());
+        $inet = Inet::getType(Types::INET);
+        $this->assertEquals(Types::INET, $inet->getName());
     }
 
-    public function testGetSQLDeclaration()
+    public function testGetSQLDeclaration() : void
     {
-        $inet = Inet::getType('inet');
+        $inet     = Inet::getType(Types::INET);
         $platform = $this->prophesize(AbstractPlatform::class);
 
         $platform->getDoctrineTypeMapping()
             ->shouldBeCalled()
-            ->withArguments(['inet'])
+            ->withArguments([Types::INET])
             ->willReturn('test');
 
         $this->assertEquals(
@@ -36,9 +42,9 @@ class InetTest extends TestCase
         );
     }
 
-    public function testConvertToDatabaseValue()
+    public function testConvertToDatabaseValue() : void
     {
-        $inet = Inet::getType('inet');
+        $inet     = Inet::getType(Types::INET);
         $platform = $this->prophesize(AbstractPlatform::class);
 
         $emptyValue = null;

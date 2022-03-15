@@ -1,57 +1,72 @@
 <?php
 
-namespace Opsway\Doctrine\DBAL\Types;
+declare(strict_types=1);
+
+namespace OpsWay\Doctrine\DBAL\Types;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 
+use function addcslashes;
+use function explode;
+use function implode;
+use function ltrim;
+use function rtrim;
+use function stripcslashes;
+
 class ArrayText extends Type
 {
-    const ARRAY_TEXT = 'text[]';
-
-    public function getName()
+    public function getName() : string
     {
-        return static::ARRAY_TEXT;
+        return Types::ARRAY_TEXT;
     }
 
-    public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
+    public function getSQLDeclaration(array $column, AbstractPlatform $platform) : string
     {
-        return $platform->getDoctrineTypeMapping(static::ARRAY_TEXT);
+        return $platform->getDoctrineTypeMapping(Types::ARRAY_TEXT);
     }
 
-    public function convertToDatabaseValue($array, AbstractPlatform $platform)
+    /**
+     * @param array|null $value
+     * @psalm-suppress all
+     */
+    public function convertToDatabaseValue($value, AbstractPlatform $platform) : ?string
     {
-        if ($array === null) {
-            return;
+        if ($value === null) {
+            return null;
         }
 
         $convertArray = [];
-        foreach ($array as $value) {
-            if ($value === null) {
-                $value = 'NULL';
+        foreach ($value as $valueItem) {
+            if ($valueItem === null) {
+                $valueItem = 'NULL';
             }
-            if ($value === '') {
-                $value = '""';
+            if ($valueItem === '') {
+                $valueItem = '""';
             }
 
-            $convertArray[] = '"' . addcslashes($value, '"') . '"';
+            $convertArray[] = '"' . addcslashes($valueItem, '"') . '"';
         }
 
         return '{' . implode(',', $convertArray) . '}';
     }
 
-    public function convertToPHPValue($value, AbstractPlatform $platform)
+    /**
+     * @param string|null $value
+     * @psalm-suppress all
+     */
+    public function convertToPHPValue($value, AbstractPlatform $platform) : ?array
     {
         if ($value === null) {
-            return;
+            return null;
         }
 
         $value = ltrim(rtrim($value, '}'), '{');
         if ($value === '') {
-            return;
+            return [];
         }
-        $result = explode(',', $value);
 
+        $result = explode(',', $value);
         foreach ($result as $key => $item) {
             $result[$key] = rtrim(ltrim(stripcslashes($item), '"'), '"');
 

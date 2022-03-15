@@ -1,27 +1,33 @@
 <?php
 
-namespace Opsway\Tests\Doctrine\ORM\Query\AST\Functions;
+declare(strict_types=1);
+
+namespace OpsWay\Tests\Unit\ORM\Query\AST\Functions;
 
 use Doctrine\ORM\Query\AST\ParenthesisExpression;
 use Doctrine\ORM\Query\Lexer;
 use Doctrine\ORM\Query\Parser;
 use Doctrine\ORM\Query\SqlWalker;
-use Opsway\Doctrine\ORM\Query\AST\Functions\Unnest;
+use OpsWay\Doctrine\ORM\Query\AST\Functions\Unnest;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 class UnnestTest extends TestCase
 {
+    use ProphecyTrait;
+
+    /** @var Unnest */
     private $unnest;
 
-    public function setUp()
+    public function setUp() : void
     {
         $this->unnest = new Unnest('test');
     }
 
-    public function testFunction()
+    public function testFunction() : void
     {
         $parser = $this->prophesize(Parser::class);
-        $expr = $this->prophesize(ParenthesisExpression::class);
+        $expr   = $this->prophesize(ParenthesisExpression::class);
 
         $parser->match()->shouldBeCalled()->withArguments([Lexer::T_IDENTIFIER]);
         $parser->match()->shouldBeCalled()->withArguments([Lexer::T_OPEN_PARENTHESIS]);

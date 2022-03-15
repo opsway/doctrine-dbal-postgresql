@@ -12,17 +12,23 @@ use Doctrine\ORM\Query\SqlWalker;
 
 use function sprintf;
 
-class ArrayAggregate extends FunctionNode
+class JsonbExists extends FunctionNode
 {
-    /** @var Node|string */
+    /** @var Node */
     /** @psalm-suppress all */
     private $expr1;
 
-    public function parse(Parser $parser) : void
+    /** @var Node */
+    /** @psalm-suppress all */
+    private $expr2;
+
+    public function parse(Parser $parser)
     {
         $parser->match(Lexer::T_IDENTIFIER);
         $parser->match(Lexer::T_OPEN_PARENTHESIS);
-        $this->expr1 = $parser->ArithmeticPrimary();
+        $this->expr1 = $parser->StringPrimary();
+        $parser->match(Lexer::T_COMMA);
+        $this->expr2 = $parser->StringPrimary();
         $parser->match(Lexer::T_CLOSE_PARENTHESIS);
     }
 
@@ -30,8 +36,9 @@ class ArrayAggregate extends FunctionNode
     public function getSql(SqlWalker $sqlWalker) : string
     {
         return sprintf(
-            'array_agg(%s)',
-            $this->expr1->dispatch($sqlWalker)
+            'jsonb_exists(%s, %s)',
+            $this->expr1->dispatch($sqlWalker),
+            $this->expr2->dispatch($sqlWalker)
         );
     }
 }

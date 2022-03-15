@@ -1,6 +1,8 @@
 <?php
 
-namespace Opsway\Doctrine\ORM\Query\AST\Functions;
+declare(strict_types=1);
+
+namespace OpsWay\Doctrine\ORM\Query\AST\Functions;
 
 use Doctrine\ORM\Query\AST\Functions\FunctionNode;
 use Doctrine\ORM\Query\AST\Node;
@@ -8,44 +10,39 @@ use Doctrine\ORM\Query\Lexer;
 use Doctrine\ORM\Query\Parser;
 use Doctrine\ORM\Query\SqlWalker;
 
+use function implode;
+use function sprintf;
+
 class RegexpReplace extends FunctionNode
 {
-    /**
-     * @var Node
-     */
+    /** @var Node */
+    /** @psalm-suppress all */
     private $text;
 
-    /**
-     * @var Node
-     */
+    /** @var Node */
+    /** @psalm-suppress all */
     private $pattern;
 
-    /**
-     * @var Node
-     */
+    /** @var Node */
+    /** @psalm-suppress all */
     private $replacement;
 
-    /**
-     * @var Node|null
-     */
+    /** @var Node|null */
+    /** @psalm-suppress all */
     private $flags;
 
-    public function parse(Parser $parser)
+    /** @psalm-suppress all */
+    public function parse(Parser $parser) : void
     {
         $parser->match(Lexer::T_IDENTIFIER);
         $parser->match(Lexer::T_OPEN_PARENTHESIS);
-
         $this->text = $parser->StringPrimary();
-
         $parser->match(Lexer::T_COMMA);
-
         $this->pattern = $parser->StringPrimary();
-
         $parser->match(Lexer::T_COMMA);
-
         $this->replacement = $parser->StringPrimary();
+        $this->flags       = null;
 
-        $this->flags = null;
         if (Lexer::T_COMMA === $parser->getLexer()->lookahead['type']) {
             $parser->match(Lexer::T_COMMA);
             $this->flags = $parser->StringPrimary();
@@ -54,7 +51,8 @@ class RegexpReplace extends FunctionNode
         $parser->match(Lexer::T_CLOSE_PARENTHESIS);
     }
 
-    public function getSql(SqlWalker $sqlWalker)
+    /** @psalm-suppress all */
+    public function getSql(SqlWalker $sqlWalker) : string
     {
         $arguments = [
             $this->text->dispatch($sqlWalker),
@@ -68,7 +66,7 @@ class RegexpReplace extends FunctionNode
 
         return sprintf(
             'regexp_replace(%s)',
-            join(', ', $arguments)
+            implode(', ', $arguments)
         );
     }
 }

@@ -1,31 +1,34 @@
 <?php
 
-namespace Opsway\Tests\Doctrine\ORM\Query\AST\Functions;
+declare(strict_types=1);
+
+namespace OpsWay\Tests\Unit\ORM\Query\AST\Functions;
 
 use Doctrine\ORM\Query\AST\ParenthesisExpression;
 use Doctrine\ORM\Query\Lexer;
 use Doctrine\ORM\Query\Parser;
 use Doctrine\ORM\Query\SqlWalker;
-use Opsway\Doctrine\ORM\Query\AST\Functions\ToTsvector;
+use OpsWay\Doctrine\ORM\Query\AST\Functions\ToTsvector;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 class ToTsvectorTest extends TestCase
 {
-    /**
-     * @var ToTsvector
-     */
+    use ProphecyTrait;
+
+    /** @var ToTsvector */
     private $toTsvector;
 
-    public function setUp()
+    public function setUp() : void
     {
         $this->toTsvector = new ToTsvector('test');
     }
 
-    public function testFunction()
+    public function testFunction() : void
     {
         $parser = $this->prophesize(Parser::class);
-        $expr = $this->prophesize(ParenthesisExpression::class);
-        $lexer = $this->prophesize(Lexer::class);
+        $expr   = $this->prophesize(ParenthesisExpression::class);
+        $lexer  = $this->prophesize(Lexer::class);
 
         $parser->match()->shouldBeCalled()->withArguments([Lexer::T_IDENTIFIER]);
         $parser->match()->shouldBeCalled()->withArguments([Lexer::T_OPEN_PARENTHESIS]);
@@ -43,12 +46,12 @@ class ToTsvectorTest extends TestCase
         $this->assertEquals('to_tsvector(test)', $this->toTsvector->getSql($sqlWalker->reveal()));
     }
 
-    public function testFunctionWithOptionalConfig()
+    public function testFunctionWithOptionalConfig() : void
     {
-        $parser = $this->prophesize(Parser::class);
-        $config = $this->prophesize(ParenthesisExpression::class);
-        $expr = $this->prophesize(ParenthesisExpression::class);
-        $lexer = $this->prophesize(Lexer::class);
+        $parser    = $this->prophesize(Parser::class);
+        $config    = $this->prophesize(ParenthesisExpression::class);
+        $expr      = $this->prophesize(ParenthesisExpression::class);
+        $lexer     = $this->prophesize(Lexer::class);
         $sqlWalker = $this->prophesize(SqlWalker::class);
 
         $config->dispatch()->shouldBeCalled()->withArguments([$sqlWalker->reveal()])->willReturn("'english'");

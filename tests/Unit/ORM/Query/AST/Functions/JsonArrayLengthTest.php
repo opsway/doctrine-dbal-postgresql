@@ -1,27 +1,33 @@
 <?php
 
-namespace Opsway\Tests\Doctrine\ORM\Query\AST\Functions;
+declare(strict_types=1);
+
+namespace OpsWay\Tests\Unit\ORM\Query\AST\Functions;
 
 use Doctrine\ORM\Query\AST\ParenthesisExpression;
 use Doctrine\ORM\Query\Lexer;
 use Doctrine\ORM\Query\Parser;
 use Doctrine\ORM\Query\SqlWalker;
-use Opsway\Doctrine\ORM\Query\AST\Functions\JsonArrayLength;
+use OpsWay\Doctrine\ORM\Query\AST\Functions\JsonArrayLength;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
-class jsonArrayLengthTest extends TestCase
+class JsonArrayLengthTest extends TestCase
 {
-    protected $jsonArrayLngth;
+    use ProphecyTrait;
 
-    public function setUp()
+    /** @var JsonArrayLength */
+    protected $jsonArrayLength;
+
+    public function setUp() : void
     {
-        $this->jsonArrayLngth = new JsonArrayLength('test');
+        $this->jsonArrayLength = new JsonArrayLength('test');
     }
 
-    public function testFunction()
+    public function testFunction() : void
     {
         $parser = $this->prophesize(Parser::class);
-        $expr = $this->prophesize(ParenthesisExpression::class);
+        $expr   = $this->prophesize(ParenthesisExpression::class);
 
         $parser->match()->shouldBeCalled()->withArguments([Lexer::T_IDENTIFIER]);
         $parser->match()->shouldBeCalled()->withArguments([Lexer::T_OPEN_PARENTHESIS]);
@@ -29,9 +35,9 @@ class jsonArrayLengthTest extends TestCase
         $parser->match()->shouldBeCalled()->withArguments([Lexer::T_CLOSE_PARENTHESIS]);
         $sqlWalker = $this->prophesize(SqlWalker::class);
 
-        $this->jsonArrayLngth->parse($parser->reveal());
+        $this->jsonArrayLength->parse($parser->reveal());
         $expr->dispatch()->shouldBeCalled()->withArguments([$sqlWalker->reveal()])->willReturn('test');
 
-        $this->assertEquals('json_array_length(test)', $this->jsonArrayLngth->getSql($sqlWalker->reveal()));
+        $this->assertEquals('json_array_length(test)', $this->jsonArrayLength->getSql($sqlWalker->reveal()));
     }
 }
