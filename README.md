@@ -71,6 +71,32 @@ Setting the column type to ```jsonb```.
 private $metaData;
 ```
 
+**Note:** If you want to use these DQL functions on an existing `json` field, you will have to alter its column type (running `make:migration` after adding `options={"jsonb": true}` will not be enough). This migration is an example of how you can do it:
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace DoctrineMigrations;
+
+use Doctrine\DBAL\Schema\Schema;
+use Doctrine\Migrations\AbstractMigration;
+
+final class VersionXXX extends AbstractMigration
+{
+    public function up(Schema $schema): void
+    {
+        $this->addSql('ALTER TABLE "user" ALTER COLUMN roles SET DATA TYPE jsonb');
+    }
+
+    public function down(Schema $schema): void
+    {
+        $this->addSql('ALTER TABLE "user" ALTER COLUMN roles SET DATA TYPE json');
+    }
+}
+```
+
 | Custom Name           | PostgreSql                | Usage in DQL                               | Result in SQL                    |
 |-----------------------|:-------------------------:|--------------------------------------------|----------------------------------|
 | CONTAINS              |            @>             | CONTAINS(field, :param)                    | (field @> '{value}')             |
