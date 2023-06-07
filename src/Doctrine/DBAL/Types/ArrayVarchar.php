@@ -14,16 +14,16 @@ use function ltrim;
 use function rtrim;
 use function stripcslashes;
 
-class ArrayText extends Type
+class ArrayVarchar extends Type
 {
     public function getName() : string
     {
-        return Types::ARRAY_TEXT;
+        return Types::ARRAY_VARCHAR;
     }
 
     public function getSQLDeclaration(array $column, AbstractPlatform $platform) : string
     {
-        return $platform->getDoctrineTypeMapping(Types::ARRAY_TEXT);
+        return $platform->getDoctrineTypeMapping(Types::ARRAY_VARCHAR);
     }
 
     /**
