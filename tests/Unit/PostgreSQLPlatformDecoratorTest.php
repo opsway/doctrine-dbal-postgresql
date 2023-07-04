@@ -67,6 +67,18 @@ class PostgreSQLPlatformDecoratorTest extends TestCase
             'table_name',
         ];
 
+        yield 'Check gin_jsonb flag' => [
+            'CREATE INDEX index_name ON table_name USING GIN (col jsonb_ops)',
+            new Index('index_name', ['col'], false, false, ['gin_jsonb']),
+            'table_name',
+        ];
+
+        yield 'Check multicolumn gin_jsonb flag' => [
+            'CREATE INDEX index_name ON table_name USING GIN (col1 jsonb_ops, col2 jsonb_ops)',
+            new Index('index_name', ['col1', 'col2'], false, false, ['gin_jsonb']),
+            'table_name',
+        ];
+
         yield 'Check gin_jsonb_path flag' => [
             'CREATE INDEX index_name ON table_name USING GIN (col jsonb_path_ops)',
             new Index('index_name', ['col'], false, false, ['gin_jsonb_path']),
