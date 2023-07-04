@@ -29,6 +29,13 @@ class PostgreSQLPlatformDecorator extends PostgreSQL100Platform
                         },
                         $columnsOrIndex->getQuotedColumns($this)
                     ));
+                case $columnsOrIndex->hasFlag('gin_jsonb'):
+                    return implode(', ', array_map(
+                        static function ($column) {
+                            return sprintf('%s jsonb_ops', $column);
+                        },
+                        $columnsOrIndex->getQuotedColumns($this)
+                    ));
                 case $columnsOrIndex->hasFlag('gin_jsonb_path'):
                     return implode(', ', array_map(
                         static function ($column) {
@@ -62,6 +69,7 @@ class PostgreSQLPlatformDecorator extends PostgreSQL100Platform
             case $index->hasFlag('gist_intbig'):
                 $table = sprintf('%s USING GIST', $tableName);
                 break;
+            case $index->hasFlag('gin_jsonb'):
             case $index->hasFlag('gin_jsonb_path'):
             case $index->hasFlag('gin_trgm_ops'):
                 $table = sprintf('%s USING GIN', $tableName);
