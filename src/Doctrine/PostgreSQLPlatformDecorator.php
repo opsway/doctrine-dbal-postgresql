@@ -4,78 +4,80 @@ declare(strict_types=1);
 
 namespace OpsWay\Doctrine;
 
-use Doctrine\DBAL\Platforms\PostgreSQL100Platform;
+use Doctrine\DBAL\Exception\InvalidArgumentException;
+use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
 use Doctrine\DBAL\Schema\Index;
-use Doctrine\DBAL\Schema\Table;
 
 use function array_map;
+use function count;
 use function implode;
 use function sprintf;
 
 /** @psalm-suppress all */
-class PostgreSQLPlatformDecorator extends PostgreSQL100Platform
+class PostgreSQLPlatformDecorator extends PostgreSQLPlatform
 {
-    /**
-     * @param Index|array $columnsOrIndex
-     */
-    public function getIndexFieldDeclarationListSQL($columnsOrIndex) : string
+    public function getCreateIndexSQL(Index $index, string $table) : string
     {
-        if ($columnsOrIndex instanceof Index) {
-            switch (true) {
-                case $columnsOrIndex->hasFlag('gist_intbig'):
-                    return implode(', ', array_map(
-                        static function ($column) {
-                            return sprintf('%s gist__intbig_ops', $column);
-                        },
-                        $columnsOrIndex->getQuotedColumns($this)
-                    ));
-                case $columnsOrIndex->hasFlag('gin_jsonb'):
-                    return implode(', ', array_map(
-                        static function ($column) {
-                            return sprintf('%s jsonb_ops', $column);
-                        },
-                        $columnsOrIndex->getQuotedColumns($this)
-                    ));
-                case $columnsOrIndex->hasFlag('gin_jsonb_path'):
-                    return implode(', ', array_map(
-                        static function ($column) {
-                            return sprintf('%s jsonb_path_ops', $column);
-                        },
-                        $columnsOrIndex->getQuotedColumns($this)
-                    ));
-                case $columnsOrIndex->hasFlag('gin_trgm_ops'):
-                    return implode(', ', array_map(
-                        static function ($column) {
-                            return sprintf('%s gin_trgm_ops', $column);
-                        },
-                        $columnsOrIndex->getQuotedColumns($this)
-                    ));
-            }
+        $name    = $index->getQuotedName($this);
+        $columns = $index->getColumns();
+
+        if (count($columns) === 0) {
+            throw new InvalidArgumentException(sprintf(
+                'Incomplete or invalid index definition %s on table %s',
+                $name,
+                $table,
+            ));
         }
 
-        return parent::getIndexFieldDeclarationListSQL($columnsOrIndex);
+        if ($index->isPrimary()) {
+            return $this->getCreatePrimaryKeySQL($index, $table);
+        }
+
+        $query  = 'CREATE ' . $this->getCreateIndexSQLFlags($index) . 'INDEX ' . $name . ' ON ' . $table;
+        $query .= sprintf(
+            ' %s(%s)',
+            $this->getIndexMethodDeclaration($index),
+            $this->getIndexFieldDeclarationListSQL($index),
+        );
+        $query .= $this->getPartialIndexSQL($index);
+
+        return $query;
     }
 
-    /**
-     * @param Table|string $table
-     */
-    public function getCreateIndexSQL(Index $index, $table) : string
+    protected function getIndexMethodDeclaration(Index $index) : string
     {
-        $tableName = $table instanceof Table
-            ? $table->getQuotedName($this)
-            : $table;
+        return match (true) {
+            $index->hasFlag('gist_intbig') => 'USING GIST ',
+            $index->hasFlag('gin_jsonb'),
+            $index->hasFlag('gin_jsonb_path'),
+            $index->hasFlag('gin_trgm_ops') => 'USING GIN ',
+            default => '',
+        };
+    }
 
-        switch (true) {
-            case $index->hasFlag('gist_intbig'):
-                $table = sprintf('%s USING GIST', $tableName);
-                break;
-            case $index->hasFlag('gin_jsonb'):
-            case $index->hasFlag('gin_jsonb_path'):
-            case $index->hasFlag('gin_trgm_ops'):
-                $table = sprintf('%s USING GIN', $tableName);
-                break;
-        }
+    protected function getIndexFieldDeclarationListSQL(Index $index) : string
+    {
+        $quotedColumns = $index->getQuotedColumns($this);
+        $quotedColumns = match (true) {
+            $index->hasFlag('gist_intbig') => array_map(
+                static fn (string $c) => $c . ' gist__intbig_ops',
+                $quotedColumns,
+            ),
+            $index->hasFlag('gin_jsonb') => array_map(
+                static fn (string $c) => $c . ' jsonb_ops',
+                $quotedColumns,
+            ),
+            $index->hasFlag('gin_jsonb_path') => array_map(
+                static fn (string $c) => $c . ' jsonb_path_ops',
+                $quotedColumns,
+            ),
+            $index->hasFlag('gin_trgm_ops') => array_map(
+                static fn (string $c) => $c . ' gin_trgm_ops',
+                $quotedColumns,
+            ),
+            default => $quotedColumns,
+        };
 
-        return parent::getCreateIndexSQL($index, $table);
+        return implode(', ', $quotedColumns);
     }
 }

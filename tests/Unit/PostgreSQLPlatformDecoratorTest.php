@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace OpsWay\Tests\Unit;
 
 use Doctrine\DBAL\Schema\Index;
-use Doctrine\DBAL\Schema\Table;
 use OpsWay\Doctrine\PostgreSQLPlatformDecorator;
 use PHPUnit\Framework\TestCase;
 
@@ -23,12 +22,11 @@ class PostgreSQLPlatformDecoratorTest extends TestCase
 
     /**
      * @dataProvider getCreateIndexSQLData
-     * @param string|Table $table
      */
     public function testGetCreateIndexSQL(
         string $expected,
         Index $index,
-        $table
+        string $table,
     ) : void {
         $actual = $this->platform->getCreateIndexSQL($index, $table);
 
@@ -47,12 +45,6 @@ class PostgreSQLPlatformDecoratorTest extends TestCase
             'CREATE INDEX index_name ON table_name (col1, col2)',
             new Index('index_name', ['col1', 'col2']),
             'table_name',
-        ];
-
-        yield 'Check without flags with Table instance' => [
-            'CREATE INDEX index_name ON table_name (col)',
-            new Index('index_name', ['col']),
-            new Table('table_name'),
         ];
 
         yield 'Check gist_intbig flag' => [

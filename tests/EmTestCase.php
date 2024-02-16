@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace OpsWay\Tests;
 
+use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Tools\Setup;
+use Doctrine\ORM\ORMSetup;
 use PHPUnit\Framework\TestCase;
 
 class EmTestCase extends TestCase
@@ -20,13 +21,16 @@ class EmTestCase extends TestCase
 
     protected function setUp() : void
     {
-        $config     = Setup::createConfiguration(true);
-        $driverImpl = $config->newDefaultAnnotationDriver([__DIR__]);
-        $config->setMetadataDriverImpl($driverImpl);
-        $this->em = EntityManager::create([
+        $config     = ORMSetup::createAttributeMetadataConfiguration([__DIR__], isDevMode: true);
+        $connection = DriverManager::getConnection([
             'driver' => 'pdo_sqlite',
             'memory' => true,
         ], $config);
+
+        $this->em = new EntityManager(
+            $connection,
+            $config,
+        );
 
         foreach ($this->customStringFunctions() as $name => $className) {
             $this->em->getConfiguration()->addCustomStringFunction($name, $className);

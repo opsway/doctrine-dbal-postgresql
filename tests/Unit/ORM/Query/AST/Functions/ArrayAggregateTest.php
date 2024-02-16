@@ -4,40 +4,32 @@ declare(strict_types=1);
 
 namespace OpsWay\Tests\Unit\ORM\Query\AST\Functions;
 
-use Doctrine\ORM\Query\AST\ParenthesisExpression;
-use Doctrine\ORM\Query\Lexer;
-use Doctrine\ORM\Query\Parser;
-use Doctrine\ORM\Query\SqlWalker;
 use OpsWay\Doctrine\ORM\Query\AST\Functions\ArrayAggregate;
-use PHPUnit\Framework\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
+use OpsWay\Tests\EmTestCase;
 
-class ArrayAggregateTest extends TestCase
+class ArrayAggregateTest extends EmTestCase
 {
-    use ProphecyTrait;
-
-    /** @var ArrayAggregate  */
-    private $arrayAggregate;
-
-    public function setUp() : void
+    protected function customStringFunctions() : array
     {
-        $this->arrayAggregate = new ArrayAggregate('test');
+        return [
+            'ARR_AGGREGATE' => ArrayAggregate::class,
+        ];
     }
 
-    public function testFunction() : void
+    /** @dataProvider functionData */
+    public function testFunction(string $dql, string $sql) : void
     {
-        $parser = $this->prophesize(Parser::class);
-        $expr   = $this->prophesize(ParenthesisExpression::class);
+        $query = $this->em->createQuery($dql);
+        $this->assertEquals($sql, $query->getSql());
+    }
 
-        $parser->match()->shouldBeCalled()->withArguments([Lexer::T_IDENTIFIER]);
-        $parser->match()->shouldBeCalled()->withArguments([Lexer::T_OPEN_PARENTHESIS]);
-        $parser->ArithmeticPrimary()->shouldBeCalled()->willReturn($expr->reveal());
-        $parser->match()->shouldBeCalled()->withArguments([Lexer::T_CLOSE_PARENTHESIS]);
-        $sqlWalker = $this->prophesize(SqlWalker::class);
-
-        $this->arrayAggregate->parse($parser->reveal());
-        $expr->dispatch()->shouldBeCalled()->withArguments([$sqlWalker->reveal()])->willReturn('test');
-
-        $this->assertEquals('array_agg(test)', $this->arrayAggregate->getSql($sqlWalker->reveal()));
+    public function functionData() : array
+    {
+        return [
+            [
+                'SELECT ARR_AGGREGATE(e.id) FROM OpsWay\Tests\Entity e',
+                'SELECT array_agg(e0_.id) AS sclr_0 FROM Entity e0_',
+            ],
+        ];
     }
 }

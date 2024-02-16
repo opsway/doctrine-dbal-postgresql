@@ -4,40 +4,32 @@ declare(strict_types=1);
 
 namespace OpsWay\Tests\Unit\ORM\Query\AST\Functions;
 
-use Doctrine\ORM\Query\AST\ParenthesisExpression;
-use Doctrine\ORM\Query\Lexer;
-use Doctrine\ORM\Query\Parser;
-use Doctrine\ORM\Query\SqlWalker;
 use OpsWay\Doctrine\ORM\Query\AST\Functions\Unnest;
-use PHPUnit\Framework\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
+use OpsWay\Tests\EmTestCase;
 
-class UnnestTest extends TestCase
+class UnnestTest extends EmTestCase
 {
-    use ProphecyTrait;
-
-    /** @var Unnest */
-    private $unnest;
-
-    public function setUp() : void
+    protected function customStringFunctions() : array
     {
-        $this->unnest = new Unnest('test');
+        return [
+            'UNNEST' => Unnest::class,
+        ];
     }
 
-    public function testFunction() : void
+    /** @dataProvider functionData */
+    public function testFunction(string $dql, string $sql) : void
     {
-        $parser = $this->prophesize(Parser::class);
-        $expr   = $this->prophesize(ParenthesisExpression::class);
+        $query = $this->em->createQuery($dql);
+        $this->assertEquals($sql, $query->getSql());
+    }
 
-        $parser->match()->shouldBeCalled()->withArguments([Lexer::T_IDENTIFIER]);
-        $parser->match()->shouldBeCalled()->withArguments([Lexer::T_OPEN_PARENTHESIS]);
-        $parser->ArithmeticPrimary()->shouldBeCalled()->willReturn($expr->reveal());
-        $parser->match()->shouldBeCalled()->withArguments([Lexer::T_CLOSE_PARENTHESIS]);
-        $sqlWalker = $this->prophesize(SqlWalker::class);
-
-        $this->unnest->parse($parser->reveal());
-        $expr->dispatch()->shouldBeCalled()->withArguments([$sqlWalker->reveal()])->willReturn('test');
-
-        $this->assertEquals('UNNEST(test)', $this->unnest->getSql($sqlWalker->reveal()));
+    public function functionData() : array
+    {
+        return [
+            [
+                'SELECT UNNEST(e.metaData) FROM OpsWay\Tests\Entity e',
+                'SELECT UNNEST(e0_.metaData) AS sclr_0 FROM Entity e0_',
+            ],
+        ];
     }
 }

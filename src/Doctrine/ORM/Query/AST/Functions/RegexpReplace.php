@@ -6,9 +6,9 @@ namespace OpsWay\Doctrine\ORM\Query\AST\Functions;
 
 use Doctrine\ORM\Query\AST\Functions\FunctionNode;
 use Doctrine\ORM\Query\AST\Node;
-use Doctrine\ORM\Query\Lexer;
 use Doctrine\ORM\Query\Parser;
 use Doctrine\ORM\Query\SqlWalker;
+use Doctrine\ORM\Query\TokenType;
 
 use function implode;
 use function sprintf;
@@ -34,21 +34,21 @@ class RegexpReplace extends FunctionNode
     /** @psalm-suppress all */
     public function parse(Parser $parser) : void
     {
-        $parser->match(Lexer::T_IDENTIFIER);
-        $parser->match(Lexer::T_OPEN_PARENTHESIS);
+        $parser->match(TokenType::T_IDENTIFIER);
+        $parser->match(TokenType::T_OPEN_PARENTHESIS);
         $this->text = $parser->StringPrimary();
-        $parser->match(Lexer::T_COMMA);
+        $parser->match(TokenType::T_COMMA);
         $this->pattern = $parser->StringPrimary();
-        $parser->match(Lexer::T_COMMA);
+        $parser->match(TokenType::T_COMMA);
         $this->replacement = $parser->StringPrimary();
         $this->flags       = null;
 
-        if (Lexer::T_COMMA === $parser->getLexer()->lookahead['type']) {
-            $parser->match(Lexer::T_COMMA);
+        if ($parser->getLexer()->isNextToken(TokenType::T_COMMA)) {
+            $parser->match(TokenType::T_COMMA);
             $this->flags = $parser->StringPrimary();
         }
 
-        $parser->match(Lexer::T_CLOSE_PARENTHESIS);
+        $parser->match(TokenType::T_CLOSE_PARENTHESIS);
     }
 
     /** @psalm-suppress all */
