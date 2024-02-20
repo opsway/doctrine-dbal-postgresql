@@ -21,8 +21,8 @@
     "phpspec/prophecy-phpunit": "^2.0",
     "symfony/cache": "^4.4 || ^5.4 || ^6.0",
     "lctrs/psalm-psr-container-plugin": "^1.6",
-    "psalm/plugin-phpunit": "^0.16.1",
-    "vimeo/psalm": "^4.22",
+    "psalm/plugin-phpunit": "^0.18",
+    "vimeo/psalm": "^5.0",
     "weirdan/doctrine-psalm-plugin": "^2.0"
   },
   "autoload": {
@@ -41,6 +41,7 @@
     }
   },
   "scripts": {
+    "psalm": "psalm",
     "test": "phpunit",
     "cs-check": "phpcs",
     "cs-fix": "phpcbf"
