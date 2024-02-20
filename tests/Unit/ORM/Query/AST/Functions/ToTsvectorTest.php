@@ -4,72 +4,36 @@ declare(strict_types=1);
 
 namespace OpsWay\Tests\Unit\ORM\Query\AST\Functions;
 
-use Doctrine\ORM\Query\AST\ParenthesisExpression;
-use Doctrine\ORM\Query\Lexer;
-use Doctrine\ORM\Query\Parser;
-use Doctrine\ORM\Query\SqlWalker;
 use OpsWay\Doctrine\ORM\Query\AST\Functions\ToTsvector;
-use PHPUnit\Framework\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
+use OpsWay\Tests\EmTestCase;
 
-class ToTsvectorTest extends TestCase
+class ToTsvectorTest extends EmTestCase
 {
-    use ProphecyTrait;
-
-    /** @var ToTsvector */
-    private $toTsvector;
-
-    public function setUp() : void
+    protected function customStringFunctions() : array
     {
-        $this->toTsvector = new ToTsvector('test');
+        return [
+            'TO_TSVECTOR' => ToTsvector::class,
+        ];
     }
 
-    public function testFunction() : void
+    /** @dataProvider functionData */
+    public function testFunction(string $dql, string $sql) : void
     {
-        $parser = $this->prophesize(Parser::class);
-        $expr   = $this->prophesize(ParenthesisExpression::class);
-        $lexer  = $this->prophesize(Lexer::class);
-
-        $parser->match()->shouldBeCalled()->withArguments([Lexer::T_IDENTIFIER]);
-        $parser->match()->shouldBeCalled()->withArguments([Lexer::T_OPEN_PARENTHESIS]);
-        $parser->StringExpression()->shouldBeCalled()->willReturn($expr->reveal());
-
-        $parser->getLexer()->shouldBeCalled()->willReturn($lexer);
-        $lexer->isNextToken()->shouldBeCalled()->withArguments([Lexer::T_COMMA])->willReturn(false);
-
-        $parser->match()->shouldBeCalled()->withArguments([Lexer::T_CLOSE_PARENTHESIS]);
-        $sqlWalker = $this->prophesize(SqlWalker::class);
-
-        $this->toTsvector->parse($parser->reveal());
-        $expr->dispatch()->shouldBeCalled()->withArguments([$sqlWalker->reveal()])->willReturn('test');
-
-        $this->assertEquals('to_tsvector(test)', $this->toTsvector->getSql($sqlWalker->reveal()));
+        $query = $this->em->createQuery($dql);
+        $this->assertEquals($sql, $query->getSql());
     }
 
-    public function testFunctionWithOptionalConfig() : void
+    public function functionData() : array
     {
-        $parser    = $this->prophesize(Parser::class);
-        $config    = $this->prophesize(ParenthesisExpression::class);
-        $expr      = $this->prophesize(ParenthesisExpression::class);
-        $lexer     = $this->prophesize(Lexer::class);
-        $sqlWalker = $this->prophesize(SqlWalker::class);
-
-        $config->dispatch()->shouldBeCalled()->withArguments([$sqlWalker->reveal()])->willReturn("'english'");
-        $expr->dispatch()->shouldBeCalled()->withArguments([$sqlWalker->reveal()])->willReturn('test');
-
-        $parser->match()->shouldBeCalled()->withArguments([Lexer::T_IDENTIFIER]);
-        $parser->match()->shouldBeCalled()->withArguments([Lexer::T_OPEN_PARENTHESIS]);
-        $parser->StringExpression()->shouldBeCalled()->willReturn($config->reveal(), $expr->reveal());
-
-        $parser->getLexer()->shouldBeCalled()->willReturn($lexer);
-        $lexer->isNextToken()->shouldBeCalled()->withArguments([Lexer::T_COMMA])->willReturn(true);
-
-        $parser->match()->shouldBeCalled()->withArguments([Lexer::T_COMMA]);
-
-        $parser->match()->shouldBeCalled()->withArguments([Lexer::T_CLOSE_PARENTHESIS]);
-
-        $this->toTsvector->parse($parser->reveal());
-
-        $this->assertEquals("to_tsvector('english', test)", $this->toTsvector->getSql($sqlWalker->reveal()));
+        return [
+            [
+                'SELECT TO_TSVECTOR(:param) FROM OpsWay\Tests\Entity e',
+                'SELECT to_tsvector(?) AS sclr_0 FROM Entity e0_',
+            ],
+            [
+                "SELECT TO_TSVECTOR('english', :param) FROM OpsWay\Tests\Entity e",
+                "SELECT to_tsvector('english', ?) AS sclr_0 FROM Entity e0_",
+            ],
+        ];
     }
 }

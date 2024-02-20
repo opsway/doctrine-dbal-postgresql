@@ -4,18 +4,26 @@ declare(strict_types=1);
 
 namespace OpsWay\Tests;
 
-use Doctrine\ORM\Mapping\Column;
-use Doctrine\ORM\Mapping\Id;
+use DateTimeImmutable;
+use Doctrine\ORM\Mapping;
 
-/** @Entity */
+#[Mapping\Entity]
 class Entity
 {
-    /** @Id @Column(type="string") @GeneratedValue */
-    private $id;
+    #[Mapping\Id]
+    #[Mapping\Column]
+    #[Mapping\GeneratedValue]
+    private string $id;
 
-    /**
-     * @var array
-     * @Column(type="json", nullable=true, options={"jsonb": true})
-     */
-    private $metaData;
+    #[Mapping\Column(type: 'json', nullable: false, options: ['jsonb' => true])]
+    private array $metaData;
+
+    #[Mapping\Column(type: 'integer[]', nullable: false)]
+    private array $intArray;
+
+    #[Mapping\Column]
+    private string $stringValue;
+
+    #[Mapping\Column]
+    private DateTimeImmutable $updatedAt;
 }

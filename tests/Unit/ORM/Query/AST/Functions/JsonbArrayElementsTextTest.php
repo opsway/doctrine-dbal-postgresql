@@ -4,43 +4,32 @@ declare(strict_types=1);
 
 namespace OpsWay\Tests\Unit\ORM\Query\AST\Functions;
 
-use Doctrine\ORM\Query\AST\ParenthesisExpression;
-use Doctrine\ORM\Query\Lexer;
-use Doctrine\ORM\Query\Parser;
-use Doctrine\ORM\Query\SqlWalker;
 use OpsWay\Doctrine\ORM\Query\AST\Functions\JsonbArrayElementsText;
-use PHPUnit\Framework\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
+use OpsWay\Tests\EmTestCase;
 
-class JsonbArrayElementsTextTest extends TestCase
+class JsonbArrayElementsTextTest extends EmTestCase
 {
-    use ProphecyTrait;
-
-    /** @var JsonbArrayElementsText */
-    private $jsonbArrayElementsText;
-
-    public function setUp() : void
+    protected function customStringFunctions() : array
     {
-        $this->jsonbArrayElementsText = new JsonbArrayElementsText('test');
+        return [
+            'JSONB_ARRAY_ELEM_TEXT' => JsonbArrayElementsText::class,
+        ];
     }
 
-    public function testFunction() : void
+    /** @dataProvider functionData */
+    public function testFunction(string $dql, string $sql) : void
     {
-        $parser = $this->prophesize(Parser::class);
-        $expr   = $this->prophesize(ParenthesisExpression::class);
+        $query = $this->em->createQuery($dql);
+        $this->assertEquals($sql, $query->getSql());
+    }
 
-        $parser->match()->shouldBeCalled()->withArguments([Lexer::T_IDENTIFIER]);
-        $parser->match()->shouldBeCalled()->withArguments([Lexer::T_OPEN_PARENTHESIS]);
-        $parser->ArithmeticPrimary()->shouldBeCalled()->willReturn($expr->reveal());
-        $parser->match()->shouldBeCalled()->withArguments([Lexer::T_CLOSE_PARENTHESIS]);
-        $sqlWalker = $this->prophesize(SqlWalker::class);
-
-        $this->jsonbArrayElementsText->parse($parser->reveal());
-        $expr->dispatch()->shouldBeCalled()->withArguments([$sqlWalker->reveal()])->willReturn('test');
-
-        $this->assertEquals(
-            'jsonb_array_elements_text(test)',
-            $this->jsonbArrayElementsText->getSql($sqlWalker->reveal())
-        );
+    public function functionData() : array
+    {
+        return [
+            [
+                'SELECT JSONB_ARRAY_ELEM_TEXT(e.metaData) FROM OpsWay\Tests\Entity e',
+                'SELECT jsonb_array_elements_text(e0_.metaData) AS sclr_0 FROM Entity e0_',
+            ],
+        ];
     }
 }

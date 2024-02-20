@@ -4,55 +4,36 @@ declare(strict_types=1);
 
 namespace OpsWay\Tests\Unit\ORM\Query\AST\Functions;
 
-use Doctrine\ORM\Query\AST\ParenthesisExpression;
-use Doctrine\ORM\Query\Lexer;
-use Doctrine\ORM\Query\Parser;
-use Doctrine\ORM\Query\SqlWalker;
 use OpsWay\Doctrine\ORM\Query\AST\Functions\RegexpReplace;
-use PHPUnit\Framework\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
+use OpsWay\Tests\EmTestCase;
 
-class RegexpReplaceTest extends TestCase
+class RegexpReplaceTest extends EmTestCase
 {
-    use ProphecyTrait;
-
-    /** @var RegexpReplace  */
-    private $regexpReplace;
-
-    public function setUp() : void
+    protected function customStringFunctions() : array
     {
-        $this->regexpReplace = new RegexpReplace('test');
+        return [
+            'REGEXP_REPLACE' => RegexpReplace::class,
+        ];
     }
 
-    public function testFunction() : void
+    /** @dataProvider functionData */
+    public function testFunction(string $dql, string $sql) : void
     {
-        $parser      = $this->prophesize(Parser::class);
-        $expr        = $this->prophesize(ParenthesisExpression::class);
-        $sqlWalker   = $this->prophesize(SqlWalker::class);
-        $lexer       = $this->prophesize(Lexer::class);
-        $lexerEntity = $lexer->reveal();
+        $query = $this->em->createQuery($dql);
+        $this->assertEquals($sql, $query->getSql());
+    }
 
-        $parser->match()->shouldBeCalled()->withArguments([Lexer::T_IDENTIFIER]);
-        $parser->match()->shouldBeCalled()->withArguments([Lexer::T_OPEN_PARENTHESIS]);
-        $parser->StringPrimary()->shouldBeCalled()->willReturn($expr->reveal());
-        $parser->match()->shouldBeCalled()->withArguments([Lexer::T_COMMA]);
-        $parser->match()->shouldBeCalled()->withArguments([Lexer::T_CLOSE_PARENTHESIS]);
-
-        $lexerEntity->lookahead['type'] = '';
-        $parser->getLexer()->shouldBeCalled()->willReturn($lexerEntity);
-        $this->regexpReplace->parse($parser->reveal());
-
-        $expr->dispatch()->shouldBeCalled()->withArguments([$sqlWalker->reveal()])->willReturn('test');
-
-        $this->assertEquals('regexp_replace(test, test, test)', $this->regexpReplace->getSql($sqlWalker->reveal()));
-
-        $lexerEntity->lookahead['type'] = Lexer::T_COMMA;
-        $parser->getLexer()->shouldBeCalled()->willReturn($lexerEntity);
-        $this->regexpReplace->parse($parser->reveal());
-
-        $this->assertEquals(
-            'regexp_replace(test, test, test, test)',
-            $this->regexpReplace->getSql($sqlWalker->reveal())
-        );
+    public function functionData() : array
+    {
+        return [
+            [
+                "SELECT REGEXP_REPLACE(e.stringValue, 'search', 'replacement') FROM OpsWay\Tests\Entity e",
+                "SELECT regexp_replace(e0_.stringValue, 'search', 'replacement') AS sclr_0 FROM Entity e0_",
+            ],
+            [
+                "SELECT REGEXP_REPLACE(e.stringValue, 'search', 'replacement', 'flags') FROM OpsWay\Tests\Entity e",
+                "SELECT regexp_replace(e0_.stringValue, 'search', 'replacement', 'flags') AS sclr_0 FROM Entity e0_",
+            ],
+        ];
     }
 }

@@ -4,48 +4,32 @@ declare(strict_types=1);
 
 namespace OpsWay\Tests\Unit\ORM\Query\AST\Functions;
 
-use Doctrine\ORM\Query\AST\ParenthesisExpression;
-use Doctrine\ORM\Query\Lexer;
-use Doctrine\ORM\Query\Parser;
-use Doctrine\ORM\Query\SqlWalker;
 use OpsWay\Doctrine\ORM\Query\AST\Functions\Extract;
-use PHPUnit\Framework\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
+use OpsWay\Tests\EmTestCase;
 
-class ExtractTest extends TestCase
+class ExtractTest extends EmTestCase
 {
-    use ProphecyTrait;
-
-    /** @var Extract */
-    private $extract;
-
-    public function setUp() : void
+    protected function customStringFunctions() : array
     {
-        $this->extract = new Extract('test');
+        return [
+            'EXTRACT' => Extract::class,
+        ];
     }
 
-    public function testFunction() : void
+    /** @dataProvider functionData */
+    public function testFunction(string $dql, string $sql) : void
     {
-        $parser      = $this->prophesize(Parser::class);
-        $expr        = $this->prophesize(ParenthesisExpression::class);
-        $sqlWalker   = $this->prophesize(SqlWalker::class);
-        $lexer       = $this->prophesize(Lexer::class);
-        $lexerEntity = $lexer->reveal();
+        $query = $this->em->createQuery($dql);
+        $this->assertEquals($sql, $query->getSql());
+    }
 
-        $parser->match()->shouldBeCalled()->withArguments([Lexer::T_IDENTIFIER]);
-        $parser->match()->shouldBeCalled()->withArguments([Lexer::T_OPEN_PARENTHESIS]);
-        $parser->match()->shouldBeCalled()->withArguments([Lexer::T_IDENTIFIER]);
-
-        $lexerEntity->token['value'] = 'test';
-        $parser->getLexer()->shouldBeCalled()->willReturn($lexerEntity);
-
-        $parser->match()->shouldBeCalled()->withArguments([Lexer::T_FROM]);
-        $parser->ScalarExpression()->shouldBeCalled()->willReturn($expr->reveal());
-        $parser->match()->shouldBeCalled()->withArguments([Lexer::T_CLOSE_PARENTHESIS]);
-
-        $this->extract->parse($parser->reveal());
-        $expr->dispatch()->shouldBeCalled()->withArguments([$sqlWalker->reveal()])->willReturn('test');
-
-        $this->assertEquals('EXTRACT(test FROM test)', $this->extract->getSql($sqlWalker->reveal()));
+    public function functionData() : array
+    {
+        return [
+            [
+                'SELECT EXTRACT(EPOCH FROM e.updatedAt) FROM OpsWay\Tests\Entity e',
+                'SELECT EXTRACT(EPOCH FROM e0_.updatedAt) AS sclr_0 FROM Entity e0_',
+            ],
+        ];
     }
 }

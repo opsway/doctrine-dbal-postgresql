@@ -4,43 +4,32 @@ declare(strict_types=1);
 
 namespace OpsWay\Tests\Unit\ORM\Query\AST\Functions;
 
-use Doctrine\ORM\Query\AST\ParenthesisExpression;
-use Doctrine\ORM\Query\Lexer;
-use Doctrine\ORM\Query\Parser;
-use Doctrine\ORM\Query\SqlWalker;
 use OpsWay\Doctrine\ORM\Query\AST\Functions\GetJsonField;
-use PHPUnit\Framework\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
+use OpsWay\Tests\EmTestCase;
 
-class GetJsonFieldTest extends TestCase
+class GetJsonFieldTest extends EmTestCase
 {
-    use ProphecyTrait;
-
-    /** @var GetJsonField */
-    private $getJsonField;
-
-    public function setUp() : void
+    protected function customStringFunctions() : array
     {
-        $this->getJsonField = new GetJsonField('test');
+        return [
+            'GET_JSON_FIELD' => GetJsonField::class,
+        ];
     }
 
-    public function testFunction() : void
+    /** @dataProvider functionData */
+    public function testFunction(string $dql, string $sql) : void
     {
-        $parser = $this->prophesize(Parser::class);
-        $expr   = $this->prophesize(ParenthesisExpression::class);
+        $query = $this->em->createQuery($dql);
+        $this->assertEquals($sql, $query->getSql());
+    }
 
-        $parser->match()->shouldBeCalled()->withArguments([Lexer::T_IDENTIFIER]);
-        $parser->match()->shouldBeCalled()->withArguments([Lexer::T_OPEN_PARENTHESIS]);
-        $parser->StringPrimary()->shouldBeCalled()->willReturn($expr->reveal());
-        $parser->match()->shouldBeCalled()->withArguments([Lexer::T_COMMA]);
-        $parser->match()->shouldBeCalled()->withArguments([Lexer::T_CLOSE_PARENTHESIS]);
-        $sqlWalker = $this->prophesize(SqlWalker::class);
-
-        $this->getJsonField->parse($parser->reveal());
-        $expr->dispatch()->shouldBeCalled()->withArguments([$sqlWalker->reveal()])->willReturn('test');
-        $this->assertEquals(
-            '(test->>test)',
-            $this->getJsonField->getSql($sqlWalker->reveal())
-        );
+    public function functionData() : array
+    {
+        return [
+            [
+                "SELECT GET_JSON_FIELD(e.metaData, 'fieldName') FROM OpsWay\Tests\Entity e",
+                "SELECT (e0_.metaData->>'fieldName') AS sclr_0 FROM Entity e0_",
+            ],
+        ];
     }
 }
