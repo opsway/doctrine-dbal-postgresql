@@ -19,7 +19,7 @@
     "phpunit/phpunit": "^9.5",
     "opsway/psr12-strict-coding-standard": "^1.1",
     "phpspec/prophecy-phpunit": "^2.0",
-    "symfony/cache": "^4.4 || ^5.4 || ^6.0",
+    "symfony/cache": "^4.4 || ^5.4 || ^6.0 || 7.0",
     "lctrs/psalm-psr-container-plugin": "^1.6",
     "psalm/plugin-phpunit": "^0.18",
     "vimeo/psalm": "^5.0",
