@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace OpsWay\Doctrine;
 
 use Doctrine\DBAL\Exception\InvalidArgumentException;
-use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
+use Doctrine\DBAL\Platforms\PostgreSQL120Platform;
 use Doctrine\DBAL\Schema\Index;
 
 use function array_map;
@@ -14,7 +14,7 @@ use function implode;
 use function sprintf;
 
 /** @psalm-suppress all */
-class PostgreSQLPlatformDecorator extends PostgreSQLPlatform
+class PostgreSQLPlatformDecorator extends PostgreSQL120Platform
 {
     public function getCreateIndexSQL(Index $index, string $table) : string
     {
