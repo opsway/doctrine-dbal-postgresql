@@ -20,7 +20,7 @@ class Inet extends Type
 
     public function getSQLDeclaration(array $column, AbstractPlatform $platform) : string
     {
-        return $platform->getDoctrineTypeMapping(Types::INET);
+        return Types::INET;
     }
 
     /**
